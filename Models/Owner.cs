@@ -9,6 +9,6 @@ namespace GarageThree.Models
     {
         public int Id { get; set; }
         public int MembershipId { get; set; }
-        public int VehicleId { get; set; }
+        public ICollection<Vehicle> Vehicles { get; set; }
     }
 }
