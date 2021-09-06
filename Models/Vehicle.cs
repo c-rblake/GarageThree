@@ -10,6 +10,11 @@ namespace GarageThree.Models
         public int Id { get; set; }
         public int OwnerId { get; set; }
         public int VehicleTypeId { get; set; }
-        public IEnumerable<Parking> Parkings { get; set; }
+        public IEnumerable<Parking> ParkingId { get; set; }
+
+        public string RegistrationNumber { get; set; }
+        public int Passengers { get; set; }
+        public string Color { get; set; }
+        public int Wheels { get; set; }
     }
 }
