@@ -9,6 +9,9 @@ namespace GarageThree.Models
     {
         public int Id { get; set; }
         public int MembershipId { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public ICollection<Vehicle> Vehicles { get; set; }
     }
 }
