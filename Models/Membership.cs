@@ -9,5 +9,9 @@ namespace GarageThree.Models
     {
         public int Id { get; set; }
         public int OwnerId { get; set; }
+        public int PersonalNumber { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public DateTime RegistrationTime { get; set; }
     }
 }
