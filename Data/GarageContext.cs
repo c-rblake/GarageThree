@@ -9,6 +9,10 @@ namespace GarageThree.Data
 {
     public class GarageContext : DbContext
     {
+        public GarageContext()
+        {
+        }
+
         public GarageContext (DbContextOptions<GarageContext> options)
             : base(options)
         {

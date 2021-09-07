@@ -11,9 +11,9 @@ namespace GarageThree.Models
         public int OwnerId { get; set; }
 
         public string RegistrationNumber { get; set; }
-        public int Passengers { get; set; }
+        public int? Passengers { get; set; }
         public string Color { get; set; }
-        public int Wheels { get; set; }
+        public int? Wheels { get; set; }
 
         public int VehicleTypeId { get; set; }
         public VehicleType VehicleType { get; set; }
