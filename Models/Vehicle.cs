@@ -18,6 +18,7 @@ namespace GarageThree.Models
         public int VehicleTypeId { get; set; }
         public VehicleType VehicleType { get; set; }
 
-        public IEnumerable<Parking> ParkingId { get; set; }
+        public IEnumerable<ParkingSpot> ParkingSpot { get; set; }
+        //public object ParkingSpots { get; internal set; }
     }
 }

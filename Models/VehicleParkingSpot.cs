@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace GarageThree.Models
 {
-    public class Parking
+    public class VehicleParkingSpot
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public int VehicleId { get; set; }
         public int ParkingSpotId { get; set; }
 

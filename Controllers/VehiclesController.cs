@@ -22,7 +22,7 @@ namespace GarageThree.Controllers
         // GET: Vehicles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vehicle.ToListAsync());
+            return View(await _context.Vehicles.ToListAsync());
         }
 
         // GET: Vehicles/Details/5
@@ -33,7 +33,7 @@ namespace GarageThree.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicle
+            var vehicle = await _context.Vehicles
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehicle == null)
             {
@@ -73,7 +73,7 @@ namespace GarageThree.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicle.FindAsync(id);
+            var vehicle = await _context.Vehicles.FindAsync(id);
             if (vehicle == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace GarageThree.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicle
+            var vehicle = await _context.Vehicles
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehicle == null)
             {
@@ -139,15 +139,15 @@ namespace GarageThree.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vehicle = await _context.Vehicle.FindAsync(id);
-            _context.Vehicle.Remove(vehicle);
+            var vehicle = await _context.Vehicles.FindAsync(id);
+            _context.Vehicles.Remove(vehicle);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool VehicleExists(int id)
         {
-            return _context.Vehicle.Any(e => e.Id == id);
+            return _context.Vehicles.Any(e => e.Id == id);
         }
     }
 }
