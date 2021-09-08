@@ -21,7 +21,7 @@ namespace GarageThree.Services
         {
             // Part 1: create List.
             // ... Print the first element of the List.
-            List<int> list = new List<int>(new int[] {1, 2, 3, 7 }); // MÅSTE FINNAS I DATABASEN
+            List<int> list = new List<int>(new int[] {1, 2, 5}); // MÅSTE FINNAS I DATABASEN
             //Console.WriteLine($"FIRST ELEMENT: {list[0]}");
 
             return list.Select(o => new SelectListItem
