@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GarageThree.Data;
 using GarageThree.Models;
+using GarageThree.ViewModels;
 
 namespace GarageThree.Controllers
 {
@@ -69,6 +70,7 @@ namespace GarageThree.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(vehicle);
+                vehicle.ArrivalTime = DateTime.Now; // Set Independently
                 await _context.SaveChangesAsync(); // readonly though??
                 return RedirectToAction(nameof(Index));
             }
@@ -78,7 +80,7 @@ namespace GarageThree.Controllers
         }
 
         // GET: Park/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id) // DbContext Method?
         {
             if (id == null)
             {
@@ -86,12 +88,29 @@ namespace GarageThree.Controllers
             }
 
             var vehicle = await _context.Vehicles.FindAsync(id);
+            
             if (vehicle == null)
             {
                 return NotFound();
             }
-            ViewData["VehicleTypeId"] = new SelectList(_context.VehicleTypes, "Id", "Id", vehicle.VehicleTypeId);
+            //ViewData["VehicleTypeId"] = new SelectList(_context.VehicleTypes, "Id", "Id", vehicle.VehicleTypeId);
+            
+
             return View(vehicle);
+        }
+
+        public async Task<IActionResult> OverView()
+        {
+            var model = _context.Vehicles.Select(v => new VehiclesOverView 
+            {
+                Id = v.Id,
+                Regnum = v.RegistrationNumber,
+                Model = v.Model,
+                Arrivaldate = v.ArrivalTime,
+                ParkedTime = (DateTime.Now - v.ArrivalTime)
+            });
+
+            return View("OverView", await model.ToListAsync());
         }
 
         // POST: Park/Edit/5
@@ -101,7 +120,8 @@ namespace GarageThree.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,RegistrationNumber,Passengers,Color,Wheels,VehicleTypeId")] Vehicle vehicle)
         {
-            if (id != vehicle.Id)
+            var arrivalTime = vehicle.ArrivalTime;
+            if (id != vehicle.Id) // HMTL CHECK
             {
                 return NotFound();
             }
@@ -111,6 +131,9 @@ namespace GarageThree.Controllers
                 try
                 {
                     _context.Update(vehicle);
+                    // Not set from outside or Bind. Todo View model and New class Preferred.
+                    _context.Entry(vehicle).Property(v => v.ArrivalTime).IsModified = false; // Lämnas orörd vid SaveChanges.
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -126,7 +149,7 @@ namespace GarageThree.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["VehicleTypeId"] = new SelectList(_context.VehicleTypes, "Id", "Id", vehicle.VehicleTypeId);
+            //ViewData["VehicleTypeId"] = new SelectList(_context.VehicleTypes, "Id", "Id", vehicle.VehicleTypeId);
             return View(vehicle);
         }
 

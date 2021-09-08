@@ -15,6 +15,7 @@ namespace GarageThree.Models
         public string RegistrationNumber { get; set; }
         public int? Passengers { get; set; }
         public string Color { get; set; }
+        public string Model { get; set; }
         public int? Wheels { get; set; }
         public DateTime ArrivalTime { get; set; }
         //Foreign Key

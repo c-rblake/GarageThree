@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GarageThree.Models;
+using GarageThree.ViewModels;
 
 namespace GarageThree.Data
 {
@@ -34,6 +35,8 @@ namespace GarageThree.Data
                 (vps => vps.HasOne<ParkingSpot>().WithMany(),
                 vps => vps.HasOne<Vehicle>().WithMany());
         }
+
+        //public DbSet<GarageThree.ViewModels.VehiclesOverView> VehiclesOverView { get; set; } INTERCEPTED!
 
     }
 

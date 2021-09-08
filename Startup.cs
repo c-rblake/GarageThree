@@ -30,7 +30,7 @@ namespace GarageThree
             services.AddControllersWithViews();
 
             services.AddDbContext<GarageContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("GarageContext")));
+                    options.UseSqlServer(Configuration.GetConnectionString("GarageContext"))); //Spelet GetSection X,y
             services.AddScoped<IGetVehicleTypesService, GetVehicleTypesService>(); // kan användas
             services.AddScoped<IDevelopmentGetOwnerService, DevelopmentGetOwnerService>(); // kan användas
             //services.AddScoped<IGetVehicleTypesService, GetTypeServiceTwo>();

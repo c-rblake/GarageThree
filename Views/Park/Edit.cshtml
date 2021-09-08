@@ -15,6 +15,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            @*<input type="hidden" asp-for="ArrivalTime" /> DO NOT DO THIS ! *@
             <div class="form-group">
                 <label asp-for="OwnerId" class="control-label"></label>
                 <select asp-for="OwnerId" class="form-control" asp-items=@await developmentService.DevelopmentGetOwners()></select>
