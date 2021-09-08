@@ -8,10 +8,14 @@ namespace GarageThree.Models
     public class Owner
     {
         public int Id { get; set; }
-        public int MembershipId { get; set; }
+        
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public int Age { get; set; }
+        public int PhonNumber { get; set; }
+        public int MembershipId { get; set; }
         public ICollection<Vehicle> Vehicles { get; set; }
     }
 }
