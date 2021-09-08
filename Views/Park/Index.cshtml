@@ -13,6 +13,7 @@
 
 <p>
     <a asp-action="Park">Park New</a>
+    <a asp-action="ReceiptsOverView">ReceiptsOverView</a>
 </p>
 
 <div class="container">
@@ -103,6 +104,8 @@
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Unpark" asp-route-id="@item.Id">Unpark</a>
+                <a asp-action="Receipt" asp-route-id="@item.Id">Receipt</a>
+                
             </td>
         </tr>
 }

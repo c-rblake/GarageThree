@@ -69,11 +69,19 @@ namespace GarageThree.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (_context.Vehicles.Where(v=>v.RegistrationNumber.Contains(vehicle.RegistrationNumber)).Count()>0) // Select(v=>v).ToList().
+                {
+                    // TODO SWAP TO DEPENDECY INJECTION-
+                    ModelState.AddModelError("RegistrationNumber", "Registration number must be unique");
+                    return View(vehicle);
+                }
+
                 _context.Add(vehicle);
                 vehicle.ArrivalTime = DateTime.Now; // Set Independently
                 await _context.SaveChangesAsync(); // readonly though??
                 return RedirectToAction(nameof(Index));
             }
+            // TODO SWAP TO DEPENDECY INJECTION-
             ViewData["VehicleTypeId"] = new SelectList(_context.VehicleTypes, "Id", "Id", vehicle.VehicleTypeId);
             ViewData["OwnerId"] = new SelectList(_context.Owners, "Id", "Id", vehicle.OwnerId); // Id Value, Text
             return View(vehicle);
@@ -111,6 +119,15 @@ namespace GarageThree.Controllers
             });
 
             return View("OverView", await model.ToListAsync());
+        }
+
+        public async Task<IActionResult> ReceiptsOverView()
+        {
+
+                var receiptsContext = _context.Receipts;
+                return View("ReceiptsOverView", await receiptsContext.ToListAsync());
+
+
         }
 
         // POST: Park/Edit/5
@@ -154,7 +171,7 @@ namespace GarageThree.Controllers
         }
 
         // GET: Park/UnPark/5
-        public async Task<IActionResult> UnPark(int? id)
+        public async Task<IActionResult> UnPark(int? id) // Replaced by Receipt
         {
             if (id == null)
             {
@@ -171,6 +188,38 @@ namespace GarageThree.Controllers
 
             return View(vehicle);
         }
+
+        public async Task<IActionResult> Receipt(int? id) // DO ONE THING. Unless you do Two of course.
+        {
+            if (id == null) { return NotFound(); }
+            var vehicle = await _context.Vehicles.FindAsync(id);
+            //var vehicle = await _context.Vehicles.FirstOrDefaultAsync(v => v.Id == id);
+            if (vehicle == null) { return NotFound(); }
+
+            var model = new ReceiptViewModel
+            {
+                Id = vehicle.Id,
+                Regnum = vehicle.RegistrationNumber,
+                Model = vehicle.Model,
+                Arrivaldate = vehicle.ArrivalTime,
+                Leavingdate = DateTime.Now,
+                ParkingTime = (DateTime.Now - vehicle.ArrivalTime),
+                Price = ((short)(DateTime.Now - vehicle.ArrivalTime).TotalMinutes) * 1
+            };
+            //Todo Persistent Receipt
+            var receipt = new Receipt
+            {
+                VehicleID = model.Id,
+                ArrivalTime = vehicle.ArrivalTime,
+                CollecTime = DateTime.Now,
+                Price = ((short)(DateTime.Now - vehicle.ArrivalTime).TotalMinutes) * 1
+            };
+            _context.Receipts.Add(receipt); //There is still only ONE database Call.
+            _context.SaveChanges(); // Save changes
+
+            return View("Receipt", model);
+        }
+        
 
         // POST: Park/UnPark/5
         [HttpPost, ActionName("Delete")]
