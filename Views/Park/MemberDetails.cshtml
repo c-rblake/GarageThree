@@ -1,0 +1,50 @@
+﻿@model IEnumerable<GarageThree.ViewModels.OwnerVehicleView>
+
+@{
+    ViewData["Title"] = "MemberDetails";
+}
+
+<h1>MemberDetails</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vehicles)
+
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @foreach (var vehicle in item.Vehicles)
+                {
+                    <span>Regnum: @vehicle.RegistrationNumber Color: @vehicle.Color </span><br>
+                }
+            </td>
+
+
+
+
+        </tr>
+}
+    </tbody>
+</table>

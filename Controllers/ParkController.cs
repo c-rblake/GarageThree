@@ -148,19 +148,27 @@ namespace GarageThree.Controllers
             {
                 return NotFound();
             }
-
             var member = _context.Memberships.Find(id);
-            var owner = _context.Owners.FirstOrDefaultAsync(o => o.Id == member.Id);
-            var vehicles = _context.Vehicles.Where(v => v.OwnerId == owner.Id).ToList();
-                //.Include(v => v.VehicleType)
-                //.FirstOrDefaultAsync(m => m.Id == id);
-
             if (member == null)
             {
                 return NotFound();
             }
+            var owner = _context.Owners.FirstOrDefaultAsync(o => o.Id == member.Id);
+            //var vehicles = _context.Vehicles.Where(v => v.OwnerId == owner.Id).ToList();
+            var vehicles2 = _context.Owners.Include(o => o.Vehicles).Where(o => o.Id == member.Id);
 
-            return View(vehicles);
+            //.Include(v => v.VehicleType)
+            //.FirstOrDefaultAsync(m => m.Id == id);
+
+            var model = vehicles2.Select(ov => new OwnerVehicleView {
+
+                Id= ov.Id,
+                FirstName = ov.FirstName,
+                LastName = ov.LastName,
+                Vehicles = ov.Vehicles
+            });
+
+            return View(await model.ToListAsync()); // await
         }
 
 
