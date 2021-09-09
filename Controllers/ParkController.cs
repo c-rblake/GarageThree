@@ -129,6 +129,40 @@ namespace GarageThree.Controllers
             return View("OverView", await model.ToListAsync());
         }
 
+        public async Task<IActionResult> MembersOverview() // Automapper.... OM JAG FÅR ETT ID så...
+        {
+            var model = _context.Memberships.Select(m => new MembersOverview
+            {
+                Id = m.Id,
+                OwnerId = m.OwnerId,
+                Email = m.Email,
+                Vehicles = _context.Vehicles.Where(v=> v.OwnerId == m.OwnerId).ToList(), // Med Hidden ID i nästa steg. DETAILS
+                VehicleCount = _context.Vehicles.Where(v => v.OwnerId == m.OwnerId).Count()
+            }
+            );
+            return View("MembersOverview", await model.ToListAsync());
+        }
+        public async Task<IActionResult> MemberDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var member = _context.Memberships.Find(id);
+            var owner = _context.Owners.FirstOrDefaultAsync(o => o.Id == member.Id);
+            var vehicles = _context.Vehicles.Where(v => v.OwnerId == owner.Id).ToList();
+                //.Include(v => v.VehicleType)
+                //.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (member == null)
+            {
+                return NotFound();
+            }
+
+            return View(vehicles);
+        }
+
 
         public async Task<IActionResult> ReceiptsOverView()
         {
