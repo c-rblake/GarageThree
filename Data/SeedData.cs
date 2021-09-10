@@ -21,7 +21,7 @@ namespace GarageThree.Data
             {
                 //TODO
                 //if (await db.Owners.AnyAsync()) return; //IF any.
-                if (await db.Memberships.AnyAsync()) return;
+                //if (await db.Memberships.AnyAsync()) return;
                 fake = new Faker("sv");
 
                 //Owner => membership //Parkingspot //Vehicle types sist vehiclesparkingspot
@@ -41,15 +41,15 @@ namespace GarageThree.Data
 
                 var vehicleTypes = GetVehiclesTypes(); // Todo failed seed.
                 await db.VehicleTypes.AddRangeAsync(vehicleTypes); // db.VehicleTypes Did not find by itself
-               // await db.SaveChangesAsync();
+                await db.SaveChangesAsync();
 
                 var parkingSpots = GetParkingSpots();
                 await db.AddRangeAsync(parkingSpots);
-                //await db.SaveChangesAsync();
+                await db.SaveChangesAsync();
 
                 var vehicles = GetVehicles(owners, vehicleTypes);
                 await db.AddRangeAsync(vehicles);
-              //  await db.SaveChangesAsync();
+                await db.SaveChangesAsync();
 
                 var vehicleParkingSpot = VehicleParkingSpots(vehicles, parkingSpots); // Ghost cars can happen..
                 await db.AddRangeAsync(vehicleParkingSpot);
@@ -91,10 +91,19 @@ namespace GarageThree.Data
             {
                 var vehicle = new Vehicle
                 {
-                    Owner = owners[1],
+                    Owner = owners[i],
                     // OwnerId = rnd.Next(1, owners.Count),
                    // VehicleTypeId = rnd.Next(1, vehicleTypes.Count),
-                    VehicleType = vehicleTypes[1]
+                    VehicleType = vehicleTypes[i%5],
+                    Color = fake.Commerce.Color(),
+                    ArrivalTime = fake.Date.Recent(7),
+                    Model = fake.Vehicle.Model(),
+                    RegistrationNumber = fake.Lorem.Letter(3).ToUpper() + fake.Random.Number(100,999).ToString(),
+                    Passengers = fake.Random.Int(6),
+                    Wheels = fake.Random.Int(4,6)
+                    
+
+                    
                     //TODO MAPPING...
 
 
