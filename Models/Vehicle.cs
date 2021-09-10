@@ -23,6 +23,7 @@ namespace GarageThree.Models
 
         //Navigation Properties
         public VehicleType VehicleType { get; set; }
+        public Owner Owner { get; set; }
 
         public IEnumerable<ParkingSpot> ParkingSpot { get; set; }
         //public object ParkingSpots { get; internal set; }

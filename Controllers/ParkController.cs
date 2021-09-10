@@ -67,6 +67,8 @@ namespace GarageThree.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Park([Bind("Id,OwnerId,RegistrationNumber,Passengers,Color,Wheels,VehicleTypeId")] Vehicle vehicle)
         {
+
+
             if (ModelState.IsValid)
             {
                 if (_context.Vehicles.Where(v=>v.RegistrationNumber.Contains(vehicle.RegistrationNumber)).Count()>0) // Select(v=>v).ToList().
@@ -107,7 +109,7 @@ namespace GarageThree.Controllers
             return View(vehicle);
         }
 
-        public async Task<IActionResult> OverView()
+        public async Task<IActionResult> OverView() //2.0 => 3.0
         {
             var model = _context.Vehicles.Select(v => new VehiclesOverView 
             {
@@ -115,11 +117,60 @@ namespace GarageThree.Controllers
                 Regnum = v.RegistrationNumber,
                 Model = v.Model,
                 Arrivaldate = v.ArrivalTime,
-                ParkedTime = (DateTime.Now - v.ArrivalTime)
+                ParkedTime = (DateTime.Now - v.ArrivalTime),
+                //3.0
+                OwnerID = v.OwnerId, // Todo Ej i ASP Vy
+                MembershipId = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId).Id, // Bara Membership ID
+                Membership = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId), // Hela membership
+                VehicleType = v.VehicleType
             });
 
+            //var membershipID = _context.Owners.Where(Membership)
             return View("OverView", await model.ToListAsync());
         }
+
+        public async Task<IActionResult> MembersOverview() // Automapper.... OM JAG FÅR ETT ID så...
+        {
+            var model = _context.Memberships.Select(m => new MembersOverview
+            {
+                Id = m.Id,
+                OwnerId = m.OwnerId,
+                Email = m.Email,
+                Vehicles = _context.Vehicles.Where(v=> v.OwnerId == m.OwnerId).ToList(), // Med Hidden ID i nästa steg. DETAILS
+                VehicleCount = _context.Vehicles.Where(v => v.OwnerId == m.OwnerId).Count()
+            }
+            );
+            return View("MembersOverview", await model.ToListAsync());
+        }
+        public async Task<IActionResult> MemberDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var member = _context.Memberships.Find(id);
+            if (member == null)
+            {
+                return NotFound();
+            }
+            var owner = _context.Owners.FirstOrDefaultAsync(o => o.Id == member.Id);
+            //var vehicles = _context.Vehicles.Where(v => v.OwnerId == owner.Id).ToList();
+            var vehicles2 = _context.Owners.Include(o => o.Vehicles).Where(o => o.Id == member.Id);
+
+            //.Include(v => v.VehicleType)
+            //.FirstOrDefaultAsync(m => m.Id == id);
+
+            var model = vehicles2.Select(ov => new OwnerVehicleView {
+
+                Id= ov.Id,
+                FirstName = ov.FirstName,
+                LastName = ov.LastName,
+                Vehicles = ov.Vehicles
+            });
+
+            return View(await model.ToListAsync()); // await
+        }
+
 
         public async Task<IActionResult> ReceiptsOverView()
         {
