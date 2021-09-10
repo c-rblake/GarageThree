@@ -10,15 +10,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GarageThree.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    [Migration("20210908091800_OverViewChanges")]
-    partial class OverViewChanges
+    [Migration("20210910075910_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("GarageThree.Models.Membership", b =>
@@ -37,8 +37,12 @@ namespace GarageThree.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PersonalNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PersonalNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("RegistrationTime")
                         .HasColumnType("datetime2");
@@ -55,6 +59,9 @@ namespace GarageThree.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -63,6 +70,9 @@ namespace GarageThree.Migrations
 
                     b.Property<int>("MembershipId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -82,6 +92,30 @@ namespace GarageThree.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ParkingSpots");
+                });
+
+            modelBuilder.Entity("GarageThree.Models.Receipt", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ArrivalTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CollecTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("VehicleID")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Receipts");
                 });
 
             modelBuilder.Entity("GarageThree.Models.Vehicle", b =>
@@ -166,7 +200,7 @@ namespace GarageThree.Migrations
 
             modelBuilder.Entity("GarageThree.Models.Vehicle", b =>
                 {
-                    b.HasOne("GarageThree.Models.Owner", null)
+                    b.HasOne("GarageThree.Models.Owner", "Owner")
                         .WithMany("Vehicles")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -177,6 +211,8 @@ namespace GarageThree.Migrations
                         .HasForeignKey("VehicleTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Owner");
 
                     b.Navigation("VehicleType");
                 });

@@ -129,9 +129,6 @@ namespace GarageThree.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MembersOverviewId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Model")
                         .HasColumnType("nvarchar(max)");
 
@@ -152,8 +149,6 @@ namespace GarageThree.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MembersOverviewId");
 
                     b.HasIndex("OwnerId");
 
@@ -201,33 +196,8 @@ namespace GarageThree.Migrations
                     b.ToTable("VehicleTypes");
                 });
 
-            modelBuilder.Entity("GarageThree.ViewModels.MembersOverview", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VehicleCount")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MembersOverview");
-                });
-
             modelBuilder.Entity("GarageThree.Models.Vehicle", b =>
                 {
-                    b.HasOne("GarageThree.ViewModels.MembersOverview", null)
-                        .WithMany("Vehicles")
-                        .HasForeignKey("MembersOverviewId");
-
                     b.HasOne("GarageThree.Models.Owner", "Owner")
                         .WithMany("Vehicles")
                         .HasForeignKey("OwnerId")
@@ -266,11 +236,6 @@ namespace GarageThree.Migrations
                 });
 
             modelBuilder.Entity("GarageThree.Models.VehicleType", b =>
-                {
-                    b.Navigation("Vehicles");
-                });
-
-            modelBuilder.Entity("GarageThree.ViewModels.MembersOverview", b =>
                 {
                     b.Navigation("Vehicles");
                 });
