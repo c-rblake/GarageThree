@@ -1,0 +1,52 @@
+﻿@model GarageThree.ViewModels.ReceiptViewModel
+
+@{
+    ViewData["Title"] = "Receipt";
+}
+
+<h1>Receipt</h1>
+
+<h3>Are you sure you want to UNPARK this?</h3>
+<div>
+    <h4>ReceiptViewModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Regnum)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Regnum)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Model)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Model)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Arrivaldate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Arrivaldate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Leavingdate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Leavingdate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete"> @*Leverage the MVC Default code for Delete**@
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Collect Car" class="btn btn-info" /> |
+        <input type="submit" value="Print Receipt" class="btn btn-danger" onclick="window.print();return false;" />
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

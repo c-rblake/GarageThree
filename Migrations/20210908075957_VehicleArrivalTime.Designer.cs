@@ -4,14 +4,16 @@ using GarageThree.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GarageThree.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    partial class GarageContextModelSnapshot : ModelSnapshot
+    [Migration("20210908075957_VehicleArrivalTime")]
+    partial class VehicleArrivalTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,9 +55,6 @@ namespace GarageThree.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -63,9 +62,6 @@ namespace GarageThree.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MembershipId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PhonNumber")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -88,30 +84,6 @@ namespace GarageThree.Migrations
                     b.ToTable("ParkingSpots");
                 });
 
-            modelBuilder.Entity("GarageThree.Models.Receipt", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("ArrivalTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CollecTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<int>("VehicleID")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Receipts");
-                });
-
             modelBuilder.Entity("GarageThree.Models.Vehicle", b =>
                 {
                     b.Property<int>("Id")
@@ -123,9 +95,6 @@ namespace GarageThree.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Color")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Model")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OwnerId")

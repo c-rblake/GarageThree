@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GarageThree.Data;
+using GarageThree.Services;
 
 namespace GarageThree
 {
@@ -29,9 +30,13 @@ namespace GarageThree
             services.AddControllersWithViews();
 
             services.AddDbContext<GarageContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("GarageContext")));
+                    options.UseSqlServer(Configuration.GetConnectionString("GarageContext"))); //Spelet GetSection X,y
+            services.AddScoped<IGetVehicleTypesService, GetVehicleTypesService>(); // kan användas
+            services.AddScoped<IDevelopmentGetOwnerService, DevelopmentGetOwnerService>(); // kan användas
+            //services.AddScoped<IGetVehicleTypesService, GetTypeServiceTwo>();
 
         }
+        //Todo Movies service injection. Dropdown Index3.
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

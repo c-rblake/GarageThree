@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace GarageThree.Models
 {
     public class ParkingSpot
+        //Todo Set Limit. Sätta size eller appconfig. Börja med seed flytta - till appconfig för snabbare deploy.
     {
         public int Id { get; set; }
         public int ParkingId { get; set; }
