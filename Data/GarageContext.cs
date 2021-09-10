@@ -31,10 +31,10 @@ namespace GarageThree.Data
         {
             modelBuilder.Entity<Vehicle>() 
                 .HasMany(v => v.ParkingSpot) 
-                .WithMany(ps => ps.Vehicle) 
+                .WithMany(ps => ps.Vehicles) 
                 .UsingEntity<VehicleParkingSpot>
-                (vps => vps.HasOne<ParkingSpot>().WithMany(),
-                vps => vps.HasOne<Vehicle>().WithMany());
+                (vps => vps.HasOne(p => p.ParkingSpot).WithMany(p => p.VehicleParkingSpots),
+                vps => vps.HasOne(p=>p.Vehicle).WithMany(p => p.VehicleParkingSpots));
         }
 
         //public DbSet<GarageThree.ViewModels.MembersOverview> MembersOverview { get; set; } Ska inte finnas.

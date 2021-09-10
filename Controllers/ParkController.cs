@@ -141,11 +141,11 @@ namespace GarageThree.Controllers
                 VehicleCount = _context.Vehicles.Where(v => v.OwnerId == m.OwnerId).Count()
             });
            
-            return View("MembersOverview", await model.ToListAsync());
+            return View(await model.ToListAsync());
         }
 
-        [HttpPost]
-        public IActionResult FilterMembers(string email = null) // HTML input name="regnum"
+        [HttpGet]
+        public async Task<IActionResult> FilterMembers(string email = null) // HTML input name="regnum" // [Bind("Id,OwnerId,VehicleTypeId")], Vehicle vehicle
         {
             var model = _context.Memberships.Select(m => new MembersOverview
             {
@@ -167,7 +167,7 @@ namespace GarageThree.Controllers
                 Console.WriteLine("funkar");
             }
 
-            return View(model);
+            return View(nameof(MembersOverview), await model.ToListAsync());
         }
 
         public async Task<IActionResult> MemberDetails(int? id)

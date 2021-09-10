@@ -17,7 +17,8 @@ namespace GarageThree.Models
         public string Phone { get; set; }
 
         
-        public int MembershipId { get; set; }
+        //public int MembershipId { get; set; }
+        public Membership Membership { get; set; }
         public ICollection<Vehicle> Vehicles { get; set; }
         
         

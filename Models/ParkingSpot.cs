@@ -10,6 +10,7 @@ namespace GarageThree.Models
     {
         public int Id { get; set; }
         public int ParkingId { get; set; }
-        public IEnumerable<Vehicle> Vehicle { get; set; }
+        public ICollection<Vehicle> Vehicles { get; set; }
+        public ICollection<VehicleParkingSpot> VehicleParkingSpots { get; set; }
     }
 }
