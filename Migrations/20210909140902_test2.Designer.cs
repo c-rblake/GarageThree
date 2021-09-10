@@ -4,14 +4,16 @@ using GarageThree.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GarageThree.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    partial class GarageContextModelSnapshot : ModelSnapshot
+    [Migration("20210909140902_test2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,8 +71,8 @@ namespace GarageThree.Migrations
                     b.Property<int>("MembershipId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PhonNumber")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -129,9 +131,6 @@ namespace GarageThree.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MembersOverviewId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Model")
                         .HasColumnType("nvarchar(max)");
 
@@ -152,8 +151,6 @@ namespace GarageThree.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MembersOverviewId");
 
                     b.HasIndex("OwnerId");
 
@@ -201,34 +198,9 @@ namespace GarageThree.Migrations
                     b.ToTable("VehicleTypes");
                 });
 
-            modelBuilder.Entity("GarageThree.ViewModels.MembersOverview", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VehicleCount")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MembersOverview");
-                });
-
             modelBuilder.Entity("GarageThree.Models.Vehicle", b =>
                 {
-                    b.HasOne("GarageThree.ViewModels.MembersOverview", null)
-                        .WithMany("Vehicles")
-                        .HasForeignKey("MembersOverviewId");
-
-                    b.HasOne("GarageThree.Models.Owner", "Owner")
+                    b.HasOne("GarageThree.Models.Owner", null)
                         .WithMany("Vehicles")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -239,8 +211,6 @@ namespace GarageThree.Migrations
                         .HasForeignKey("VehicleTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Owner");
 
                     b.Navigation("VehicleType");
                 });
@@ -266,11 +236,6 @@ namespace GarageThree.Migrations
                 });
 
             modelBuilder.Entity("GarageThree.Models.VehicleType", b =>
-                {
-                    b.Navigation("Vehicles");
-                });
-
-            modelBuilder.Entity("GarageThree.ViewModels.MembersOverview", b =>
                 {
                     b.Navigation("Vehicles");
                 });
