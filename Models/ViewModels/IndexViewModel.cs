@@ -12,6 +12,8 @@ namespace GarageThree.Models.ViewModels
                 public string RegistrationNumber { get; set; }
                 public int ParkId { get; set; }
                 public string OwnerFullName { get; set; }
+               
                 public string VehicleTypeTypeName { get; set; }
+                public int MemberId { get; set; }
     }
 }

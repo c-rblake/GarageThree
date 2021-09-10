@@ -32,8 +32,8 @@ namespace GarageThree.Controllers
                 RegistrationNumber = v.RegistrationNumber,
                 ParkId = v.VehicleTypeId,
 
-            });
-            
+            })
+               .Take(10);
 
               return View("Index2", await model.ToListAsync());
            

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GarageThree.Data;
 using GarageThree.Models;
+using GarageThree.ViewModels;
 
 namespace GarageThree.Controllers
 {
@@ -54,15 +55,22 @@ namespace GarageThree.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Size,TypeName,ReqparkingSpots,Price")] VehicleType vehicleType)
+        public async Task<IActionResult> Create(VehicleTypCreateViewModel vehicleTypCreateViewModel)
         {
             if (ModelState.IsValid)
             {
+                var vehicleType = new VehicleType
+                {
+                    Price = vehicleTypCreateViewModel.Price,
+                    Size = vehicleTypCreateViewModel.Size,
+                    TypeName = vehicleTypCreateViewModel.TypeName,
+                    ReqparkingSpots = vehicleTypCreateViewModel.ReqparkingSpots
+                };
                 _context.Add(vehicleType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(vehicleType);
+            return View(vehicleTypCreateViewModel);
         }
 
         // GET: VehicleTypes/Edit/5
