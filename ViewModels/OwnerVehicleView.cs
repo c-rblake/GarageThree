@@ -11,6 +11,6 @@ namespace GarageThree.ViewModels
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public List<Vehicle> Vehicles { get; set; }
+        public ICollection<Vehicle> Vehicles { get; set; }
     }
 }

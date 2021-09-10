@@ -37,6 +37,10 @@ namespace GarageThree.Data
                 vps => vps.HasOne<Vehicle>().WithMany());
         }
 
+        public DbSet<GarageThree.ViewModels.MembersOverview> MembersOverview { get; set; }
+
+
+
 
         //public DbSet<GarageThree.ViewModels.OwnerVehicleView> OwnerVehicleView { get; set; } Naj.
 
