@@ -21,22 +21,22 @@ namespace GarageThree
 
 
             //TODO SEED Garage Spots for Example.
-            //using (var scope = host.Services.CreateScope())
-            //{
+            using (var scope = host.Services.CreateScope())
+                {
 
-            //    var services = scope.ServiceProvider;
+                    var services = scope.ServiceProvider;
 
-            //    try
-            //    {
-                    
-            //    }
-            //    catch (Exception)
-            //    {
+                    try
+                    {
+                        SeedData.InitAsync(services).Wait();
+                    }
+                    catch (Exception e)
+                    {
+                        var logger = services.GetRequiredService<ILogger<Program>>();
+                        logger.LogError(e.Message, "Seed failed");
+                    }
 
-            //        throw;
-            //    }
-              
-            //}
+                }
 
 
             host.Run();

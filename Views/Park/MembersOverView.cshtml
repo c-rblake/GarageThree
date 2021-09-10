@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GarageThree.ViewModels.MembersOverview>
+﻿@model IEnumerable<MembersOverview>
 
 @{
     ViewData["Title"] = "MembersOverView";
@@ -6,9 +6,23 @@
 
 <h1>MemberOverView</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
+
+
+<form asp-action="FilterMembers" method="get">
+    <div class="input-group mb-3">
+        <input type="text" name="email" class="form-control" placeholder="Search on Email...">
+        <div class="input-group-append">
+            @*<select name="vehicleType" asp-items="@Html.GetEnumSelectList<VehicleTypes>()" class="form-control">
+                <option selected="selected" value="">All Types of Vehicles</option>
+            </select>*@
+        </div>
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary btn-outline-secondary" id="search-btn">Search</button>
+        </div>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -25,23 +39,24 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OwnerId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VehicleCount)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="MemberDetails" asp-route-id="@item.Id">MemberDetails</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OwnerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleCount)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="MemberDetails" asp-route-id="@item.Id">MemberDetails</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

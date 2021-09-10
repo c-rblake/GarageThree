@@ -25,7 +25,8 @@ namespace GarageThree.Models
         public VehicleType VehicleType { get; set; }
         public Owner Owner { get; set; }
 
-        public IEnumerable<ParkingSpot> ParkingSpot { get; set; }
+        public ICollection<ParkingSpot> ParkingSpot { get; set; }
+        public ICollection<VehicleParkingSpot> VehicleParkingSpots { get; set; }
         //public object ParkingSpots { get; internal set; }
     }
 }

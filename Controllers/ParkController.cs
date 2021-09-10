@@ -129,19 +129,47 @@ namespace GarageThree.Controllers
             return View("OverView", await model.ToListAsync());
         }
 
+
         public async Task<IActionResult> MembersOverview() // Automapper.... OM JAG FÅR ETT ID så...
         {
             var model = _context.Memberships.Select(m => new MembersOverview
             {
                 Id = m.Id,
-                OwnerId = m.OwnerId,
+                OwnerId = m.OwnerId, //  Todo Unique property
                 Email = m.Email,
                 Vehicles = _context.Vehicles.Where(v=> v.OwnerId == m.OwnerId).ToList(), // Med Hidden ID i nästa steg. DETAILS
                 VehicleCount = _context.Vehicles.Where(v => v.OwnerId == m.OwnerId).Count()
-            }
-            );
-            return View("MembersOverview", await model.ToListAsync());
+            });
+           
+            return View(await model.ToListAsync());
         }
+
+        [HttpGet]
+        public async Task<IActionResult> FilterMembers(string email = null) // HTML input name="regnum" // [Bind("Id,OwnerId,VehicleTypeId")], Vehicle vehicle
+        {
+            var model = _context.Memberships.Select(m => new MembersOverview
+            {
+                Id = m.Id,
+                OwnerId = m.OwnerId, //  Todo Unique property
+                Email = m.Email,
+                Vehicles = _context.Vehicles.Where(v => v.OwnerId == m.OwnerId).ToList(), // Med Hidden ID i nästa steg. DETAILS
+                VehicleCount = _context.Vehicles.Where(v => v.OwnerId == m.OwnerId).Count()
+            });
+
+            model = email == null ?
+                model :
+                //model.Where(v => v.Regnum == regnum); EXACT MATCH
+                model.Where(v => v.Email.Contains(email));
+
+            if (model.Count() == 0)
+            {
+                TempData["Empty"] = "Registration number could not be found";
+                Console.WriteLine("funkar");
+            }
+
+            return View(nameof(MembersOverview), await model.ToListAsync());
+        }
+
         public async Task<IActionResult> MemberDetails(int? id)
         {
             if (id == null)

@@ -11,7 +11,10 @@ namespace GarageThree.Models
         public int VehicleId { get; set; }
         public int ParkingSpotId { get; set; }
 
+        public Vehicle Vehicle { get; set; }
+        public ParkingSpot ParkingSpot { get; set; }
+
         //public DateTime ArrivalTime { get; set; }
         //public DateTime CollectTime { get; set; }
-}
+    }
 }
