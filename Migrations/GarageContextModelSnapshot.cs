@@ -69,9 +69,6 @@ namespace GarageThree.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MembershipId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 

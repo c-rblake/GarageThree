@@ -8,24 +8,6 @@ namespace GarageThree.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Memberships",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OwnerId = table.Column<int>(type: "int", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PersonalNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RegistrationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Memberships", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Owners",
                 columns: table => new
                 {
@@ -34,8 +16,7 @@ namespace GarageThree.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Age = table.Column<int>(type: "int", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MembershipId = table.Column<int>(type: "int", nullable: false)
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -85,6 +66,30 @@ namespace GarageThree.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_VehicleTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Memberships",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OwnerId = table.Column<int>(type: "int", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PersonalNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegistrationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Memberships", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Memberships_Owners_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Owners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,6 +147,12 @@ namespace GarageThree.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Memberships_OwnerId",
+                table: "Memberships",
+                column: "OwnerId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Parkings_VehicleId",
