@@ -4,19 +4,21 @@ using GarageThree.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GarageThree.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    partial class GarageContextModelSnapshot : ModelSnapshot
+    [Migration("20210910080319_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.9")
+                .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("GarageThree.Models.Membership", b =>
@@ -35,20 +37,13 @@ namespace GarageThree.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PersonalNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PersonalNumber")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("RegistrationTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId")
-                        .IsUnique();
 
                     b.ToTable("Memberships");
                 });
@@ -199,17 +194,6 @@ namespace GarageThree.Migrations
                     b.ToTable("VehicleTypes");
                 });
 
-            modelBuilder.Entity("GarageThree.Models.Membership", b =>
-                {
-                    b.HasOne("GarageThree.Models.Owner", "Owner")
-                        .WithOne("Membership")
-                        .HasForeignKey("GarageThree.Models.Membership", "OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("GarageThree.Models.Vehicle", b =>
                 {
                     b.HasOne("GarageThree.Models.Owner", "Owner")
@@ -231,38 +215,22 @@ namespace GarageThree.Migrations
 
             modelBuilder.Entity("GarageThree.Models.VehicleParkingSpot", b =>
                 {
-                    b.HasOne("GarageThree.Models.ParkingSpot", "ParkingSpot")
-                        .WithMany("VehicleParkingSpots")
+                    b.HasOne("GarageThree.Models.ParkingSpot", null)
+                        .WithMany()
                         .HasForeignKey("ParkingSpotId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GarageThree.Models.Vehicle", "Vehicle")
-                        .WithMany("VehicleParkingSpots")
+                    b.HasOne("GarageThree.Models.Vehicle", null)
+                        .WithMany()
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ParkingSpot");
-
-                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("GarageThree.Models.Owner", b =>
                 {
-                    b.Navigation("Membership");
-
                     b.Navigation("Vehicles");
-                });
-
-            modelBuilder.Entity("GarageThree.Models.ParkingSpot", b =>
-                {
-                    b.Navigation("VehicleParkingSpots");
-                });
-
-            modelBuilder.Entity("GarageThree.Models.Vehicle", b =>
-                {
-                    b.Navigation("VehicleParkingSpots");
                 });
 
             modelBuilder.Entity("GarageThree.Models.VehicleType", b =>

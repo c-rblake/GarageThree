@@ -22,6 +22,8 @@ namespace GarageThree.ViewModels
 
         public Membership Membership { get; set; }
 
+        
+
 
     }
 

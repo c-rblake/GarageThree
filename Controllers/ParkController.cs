@@ -193,7 +193,7 @@ namespace GarageThree.Controllers
                 Id= ov.Id,
                 FirstName = ov.FirstName,
                 LastName = ov.LastName,
-                Vehicles = ov.Vehicles
+                Vehicles = (List<Vehicle>)ov.Vehicles
             });
 
             return View(await model.ToListAsync()); // await
