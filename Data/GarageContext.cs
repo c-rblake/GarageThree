@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GarageThree.Models;
 using GarageThree.ViewModels;
+using GarageThree.Models.ViewModels;
 
 namespace GarageThree.Data
 {
@@ -36,6 +37,8 @@ namespace GarageThree.Data
                 (vps => vps.HasOne(p => p.ParkingSpot).WithMany(p => p.VehicleParkingSpots),
                 vps => vps.HasOne(p=>p.Vehicle).WithMany(p => p.VehicleParkingSpots));
         }
+
+        //public DbSet<GarageThree.Models.ViewModels.OwnerMembershipSignup> OwnerMembershipSignup { get; set; }
 
         //public DbSet<GarageThree.ViewModels.MembersOverview> MembersOverview { get; set; } Ska inte finnas.
 

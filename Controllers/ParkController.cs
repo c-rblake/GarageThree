@@ -41,12 +41,29 @@ namespace GarageThree.Controllers
                 var model = _context.Vehicles.Include(v => v.VehicleType)
                 .Include(ps => ps.ParkingSpot)
                 .Where(v=>v.RegistrationNumber.Contains(RegistrationNumber));
+        
                 return View(nameof(Collect), await model.ToListAsync());
             }
+
+            TempData["Empty"] = "Registration number could not be found"; //BUGGY
+            //if (model.Count() == 0)
+            //{
+            //    TempData["Empty"] = "Registration number could not be found";
+            //    Console.WriteLine("funkar");
+            //}
             //model = RegistrationNumber == null ? model : model.Where(v=>v.RegistrationNumber=="helo"); Not allowed
+
+            //Todo Dropdown logic.
 
             return RedirectToAction(nameof(Collect));
         }
+
+        public async Task<IActionResult> SignUp()
+        {
+            return View();
+        }
+
+
 
         // GET: Park/Details/5
         public async Task<IActionResult> Details(int? id)

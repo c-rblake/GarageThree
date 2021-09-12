@@ -8,6 +8,13 @@
 <h1>Collect Vehicle</h1>
 
 
+@if (TempData["Empty"] != null)
+{
+<p class="text-danger">@TempData["Empty"].ToString()</p>
+
+}
+
+
 <form asp-action="FilterCollect" method="get">
     <div class="input-group mb-3">
         <input type="text" name="RegistrationNumber" class="form-control" placeholder="Search on Registration Number...">
@@ -49,31 +56,31 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegistrationNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Passengers)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Wheels)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VehicleType.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ParkingSpot)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="UnPark" asp-route-id="@item.Id">UnPark</a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegistrationNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Passengers)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Wheels)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleType.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParkingSpot)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="UnPark" asp-route-id="@item.Id">UnPark</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
