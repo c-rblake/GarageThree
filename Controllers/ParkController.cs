@@ -103,7 +103,7 @@ namespace GarageThree.Controllers
 
             if (ModelState.IsValid)
             {
-                var ownerId = _context.Vehicles.Where(v => v.OwnerId == vehicle.OwnerId);
+                var ownerId = _context.Owners.Where(o => o.Id == vehicle.OwnerId);
                 if (!ownerId.Any()) // Select(v=>v).ToList(). TO DO VALIDATE FURTHER
                 {
                     // TODO SWAP TO DEPENDECY INJECTION-
@@ -116,9 +116,22 @@ namespace GarageThree.Controllers
                     ModelState.AddModelError("RegistrationNumber", "Registration number must be unique");
                     return View(vehicle);
                 }
+                var ageVehicleAbove18 = _context.Owners
+                    .Include(o => o.Vehicles.Where(v => v.Id == vehicle.Id)) // Query Vehicle
+                    .FirstOrDefault().Age >= 18; //Query Owner
+
+
+                if (!ageVehicleAbove18) 
+                {
+                    ModelState.AddModelError("Age", "You are too young to park that Vehicle here, Find an older member to help you");
+                    return View(vehicle);
+                }
+
                 var availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limit
                 // Should be _context.Parkinspots.CHECK FOR SIZE REQUIREMENTS ..... .ToList()...
-                vehicle.ParkingSpot.Add(availibleParks);
+                //vehicle.ParkingSpot.Add(availibleParks); TODO add parking spots. Null reference.
+
+                //availibleParks.Add(vehicle);
 
                 vehicle.ArrivalTime = DateTime.Now; // Set Independently
                 _context.Add(vehicle);
