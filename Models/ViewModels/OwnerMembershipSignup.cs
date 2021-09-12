@@ -12,9 +12,9 @@ namespace GarageThree.Models.ViewModels
     {
         public int Id { get; set; }
 
-        [CheckFirstAndLastNames]
+        //[CheckFirstAndLastNames]
         public string FirstName { get; set; }
-        [CheckFirstAndLastNames]
+        //[CheckFirstAndLastNames]
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
         public int Age { get; set; }

@@ -103,7 +103,8 @@ namespace GarageThree.Controllers
 
             if (ModelState.IsValid)
             {
-                if (_context.Vehicles.Where(v => v.RegistrationNumber.Contains(vehicle.RegistrationNumber)).Count() == 0) // Select(v=>v).ToList().
+                var ownerId = _context.Vehicles.Where(v => v.OwnerId == vehicle.OwnerId);
+                if (!ownerId.Any()) // Select(v=>v).ToList(). TO DO VALIDATE FURTHER
                 {
                     // TODO SWAP TO DEPENDECY INJECTION-
                     ModelState.AddModelError("OwnerId", "New to the Garage? Sign up here");
@@ -115,9 +116,12 @@ namespace GarageThree.Controllers
                     ModelState.AddModelError("RegistrationNumber", "Registration number must be unique");
                     return View(vehicle);
                 }
+                var availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limit
+                // Should be _context.Parkinspots.CHECK FOR SIZE REQUIREMENTS ..... .ToList()...
+                vehicle.ParkingSpot.Add(availibleParks);
 
-                _context.Add(vehicle);
                 vehicle.ArrivalTime = DateTime.Now; // Set Independently
+                _context.Add(vehicle);
                 await _context.SaveChangesAsync(); // readonly though??
                 return RedirectToAction(nameof(Index));
             }
@@ -160,7 +164,8 @@ namespace GarageThree.Controllers
                 OwnerID = v.OwnerId, // Todo Ej i ASP Vy
                 MembershipId = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId).Id, // Bara Membership ID
                 Membership = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId), // Hela membership
-                VehicleType = v.VehicleType
+                VehicleType = v.VehicleType,
+                ParkingSpots = v.ParkingSpot
             });
 
             //var membershipID = _context.Owners.Where(Membership)
