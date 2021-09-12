@@ -86,6 +86,12 @@ namespace GarageThree.Controllers
 
             if (ModelState.IsValid)
             {
+                if (_context.Vehicles.Where(v => v.RegistrationNumber.Contains(vehicle.RegistrationNumber)).Count() == 0) // Select(v=>v).ToList().
+                {
+                    // TODO SWAP TO DEPENDECY INJECTION-
+                    ModelState.AddModelError("OwnerId", "New to the Garage? Sign up here");
+                    return View(vehicle);
+                }
                 if (_context.Vehicles.Where(v=>v.RegistrationNumber.Contains(vehicle.RegistrationNumber)).Count()>0) // Select(v=>v).ToList().
                 {
                     // TODO SWAP TO DEPENDECY INJECTION-
