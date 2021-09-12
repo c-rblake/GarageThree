@@ -2,10 +2,25 @@
 @model IEnumerable<GarageThree.Models.Vehicle>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Collect";
 }
 
-<h1>Index2</h1>
+<h1>Collect Vehicle</h1>
+
+
+<form asp-action="FilterCollect" method="get">
+    <div class="input-group mb-3">
+        <input type="text" name="RegistrationNumber" class="form-control" placeholder="Search on Registration Number...">
+        <div class="input-group-append">
+            @*<select name="vehicleType" asp-items="@Html.GetEnumSelectList<VehicleTypes>()" class="form-control">
+                    <option selected="selected" value="">All Types of Vehicles</option>
+                </select>*@
+        </div>
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary btn-outline-secondary" id="search-btn"><i class="fa fa-search">&emsp;Search</i></button>
+        </div>
+    </div>
+</form>
 
 <table class="table">
     <thead>

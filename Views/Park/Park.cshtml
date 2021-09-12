@@ -15,9 +15,10 @@
         <form asp-action="Park">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="OwnerId" class="control-label"></label>
+                <label asp-for="OwnerId" class="control-label">Owner</label>
                 <select asp-for="OwnerId" class ="form-control" asp-items=@await developmentService.DevelopmentGetOwners();></select>
             </div>
+            @*TODO*@---TODO : CLICK HERE TO SIGN UP---- <br />
             <div class="form-group">
                 <label asp-for="RegistrationNumber" class="control-label"></label>
                 <input asp-for="RegistrationNumber" class="form-control" />
@@ -39,8 +40,8 @@
                 <span asp-validation-for="Wheels" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="VehicleTypeId" class="control-label"></label>
-                <select asp-for="VehicleTypeId" class ="form-control" asp-items="ViewBag.VehicleTypeId"></select>
+                <label asp-for="VehicleTypeId" class="control-label">Vehicle Type</label>
+                <select asp-for="VehicleTypeId" class ="form-control" asp-items=@await service.GetVehicleTypesAsync();></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Park" class="btn btn-primary" />

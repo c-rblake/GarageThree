@@ -27,10 +27,25 @@ namespace GarageThree.Controllers
             return View(await garageContext.ToListAsync());
         }
 
-        public async Task<IActionResult> Index2()
+        public async Task<IActionResult> Collect()
         {
             var garageContext = _context.Vehicles.Include(v => v.VehicleType).Include(ps => ps.ParkingSpot);
-            return View(nameof(Index2), await garageContext.ToListAsync());
+            return View(nameof(Collect), await garageContext.ToListAsync());
+        }
+
+        public async Task<IActionResult> FilterCollect(string RegistrationNumber = null)
+        {
+            //Todo if RegistrationNumber = null do nothing
+            if (!String.IsNullOrWhiteSpace(RegistrationNumber))
+            { 
+                var model = _context.Vehicles.Include(v => v.VehicleType)
+                .Include(ps => ps.ParkingSpot)
+                .Where(v=>v.RegistrationNumber.Contains(RegistrationNumber));
+                return View(nameof(Collect), await model.ToListAsync());
+            }
+            //model = RegistrationNumber == null ? model : model.Where(v=>v.RegistrationNumber=="helo"); Not allowed
+
+            return RedirectToAction(nameof(Collect));
         }
 
         // GET: Park/Details/5
