@@ -131,10 +131,14 @@ namespace GarageThree.Controllers
                 // Should be _context.Parkinspots.CHECK FOR SIZE REQUIREMENTS ..... .ToList()...
                 //vehicle.ParkingSpot.Add(availibleParks); TODO add parking spots. Null reference.
 
+                availibleParks.Vehicles.Add(vehicle);
+
                 //availibleParks.Add(vehicle);
 
                 vehicle.ArrivalTime = DateTime.Now; // Set Independently
-                _context.Add(vehicle);
+                //_context.Add(vehicle);
+                _context.Vehicles.Add(vehicle);
+                
                 await _context.SaveChangesAsync(); // readonly though??
                 return RedirectToAction(nameof(Index));
             }
