@@ -82,6 +82,8 @@ namespace GarageThree.Data
             return vehicleParkingSpots;
         }
 
+
+        //FAILS TO SEED...
         private static List<Vehicle> GetVehicles(List<Owner> owners, List<VehicleType> vehicleTypes)
         {
             Random rnd = new Random();
@@ -94,13 +96,15 @@ namespace GarageThree.Data
                     Owner = owners[i],
                     // OwnerId = rnd.Next(1, owners.Count),
                    // VehicleTypeId = rnd.Next(1, vehicleTypes.Count),
-                    VehicleType = vehicleTypes[i%5],
+                    //VehicleType = vehicleTypes[i%5],
+                    VehicleType = vehicleTypes[0],
                     Color = fake.Commerce.Color(),
                     ArrivalTime = fake.Date.Recent(7),
                     Model = fake.Vehicle.Model(),
                     RegistrationNumber = fake.Lorem.Letter(3).ToUpper() + fake.Random.Number(100,999).ToString(),
                     Passengers = fake.Random.Int(6),
                     Wheels = fake.Random.Int(4,6)
+                    //ParkingSpots
                 };
                 
 
@@ -134,8 +138,8 @@ namespace GarageThree.Data
                 new VehicleType {Price = 50000, ReqparkingSpots = 1, Size = 1, TypeName = "Car"},
                 new VehicleType {Price = 50000, ReqparkingSpots = 1, Size = 1, TypeName = "Mini van"},
                 new VehicleType {Price = 50000, ReqparkingSpots = 1, Size = 1, TypeName = "Suv"},
-                new VehicleType {Price = 50000, ReqparkingSpots = 1, Size = 1, TypeName = "Bike"},
-                new VehicleType {Price = 50000, ReqparkingSpots = 1, Size = 1, TypeName = "Riding Cat"}
+                new VehicleType {Price = 50000, ReqparkingSpots = 1, Size = 3, TypeName = "Bus"},
+                new VehicleType {Price = 50000, ReqparkingSpots = 1, Size = 4, TypeName = "Truck"}
 
             };
 
