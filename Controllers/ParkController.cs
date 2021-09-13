@@ -135,13 +135,41 @@ namespace GarageThree.Controllers
                     return View(vehicle);
                 }
 
+                vehicle.ArrivalTime = DateTime.Now;
+                _context.Vehicles.Add(vehicle);
 
                 //WORK IN PROGRESS
-                var availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limit
-                vehicle.ParkingSpots.Add(availibleParks);
-                vehicle.ArrivalTime = DateTime.Now;
+                //var availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limitvar availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limit
+                                                                             // Write function that returns first empty spot
+                                                                             // .Include(ps => !ps.VehicleParkingSpot.Any())
+                                                                             // return 
 
-                _context.Vehicles.Add(vehicle);
+
+                //var availibleParks = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).Where(ps => ps.VehicleParkingSpots == null).FirstOrDefault();
+                var availibleParks = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).FirstOrDefault(); // NR0 returned.
+
+                var availibleParks2 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).Where(ps => ps.Id == 2).FirstOrDefault(); // Works 2nd returned
+
+                var availibleParks3 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots.Where(vps=> vps.Vehicle == null)).FirstOrDefault(); // Works
+                var availibleParks4 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots)
+                    .Where(ps => ps.VehicleParkingSpots == null)
+                    .FirstOrDefault(); // Works
+
+
+
+                var newParking = new VehicleParkingSpot
+                {
+                    ParkingSpot = availibleParks4,
+                    Vehicle = vehicle
+                };
+
+
+                _context.Add(newParking);
+                //if VehicleParkinSpot
+                //vehicle.ParkingSpots.Add(availibleParks);
+                
+
+                
                 TempData["Success"] = $"Vehicle {vehicle.RegistrationNumber} succesfully parked at Parking: {vehicle.ParkingSpots.FirstOrDefault().ParkingId}";
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -358,6 +386,10 @@ namespace GarageThree.Controllers
                 CollecTime = DateTime.Now,
                 Price = ((short)(DateTime.Now - vehicle.ArrivalTime).TotalMinutes) * 1
             };
+
+            TempData["Unpark"] = $"Vehicle {model.Regnum} Successfully Unparked";
+
+
             _context.Receipts.Add(receipt); //There is still only ONE database Call.
             _context.SaveChanges(); // Save changes
 

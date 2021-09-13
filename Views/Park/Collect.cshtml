@@ -48,7 +48,8 @@
                 @Html.DisplayNameFor(model => model.VehicleType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ParkingSpots)
+                @*Html.DisplayNameFor(model => model.ParkingSpots)*@
+                Parking Spot
             </th>
             <th></th>
         </tr>
@@ -76,9 +77,9 @@
                     @Html.DisplayFor(modelItem => item.ParkingSpots)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="UnPark" asp-route-id="@item.Id">UnPark</a>
+                    <a asp-action="Receipt" asp-route-id="@item.Id">Collect and Receipt</a>
                 </td>
             </tr>
         }

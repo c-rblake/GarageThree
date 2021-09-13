@@ -10,6 +10,9 @@ namespace GarageThree.Models
     {
         public int Id { get; set; }
         public int ParkingId { get; set; }
+
+
+
         public ICollection<Vehicle> Vehicles = new List<Vehicle>(); // For parking Or else NUll Reference..
         public ICollection<VehicleParkingSpot> VehicleParkingSpots { get; set; }
     }

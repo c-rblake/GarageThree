@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<GarageThree.Models.ParkingSpot>
 
+
+
 @{
     ViewData["Title"] = "ParkinSpots";
 }
@@ -15,6 +17,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ParkingId)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vehicles)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -23,6 +28,12 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ParkingId)
+            </td>
+            <td>
+                @*@foreach (var vehicle in item.Vehicles)
+                {
+                    @Html.DisplayFor(vehicle.RegistrationNumber)
+                }*@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
