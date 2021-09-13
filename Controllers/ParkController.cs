@@ -27,9 +27,15 @@ namespace GarageThree.Controllers
             return View(await garageContext.ToListAsync());
         }
 
+        public async Task<IActionResult> ParkinSpots()
+        {
+            var garageContext = _context.ParkingSpots.Include(p => p.Vehicles);
+            return View(await garageContext.ToListAsync());
+        }
+
         public async Task<IActionResult> Collect()
         {
-            var garageContext = _context.Vehicles.Include(v => v.VehicleType).Include(ps => ps.ParkingSpot);
+            var garageContext = _context.Vehicles.Include(v => v.VehicleType).Include(ps => ps.ParkingSpots);
             return View(nameof(Collect), await garageContext.ToListAsync());
         }
 
@@ -39,7 +45,7 @@ namespace GarageThree.Controllers
             if (!String.IsNullOrWhiteSpace(RegistrationNumber))
             { 
                 var model = _context.Vehicles.Include(v => v.VehicleType)
-                .Include(ps => ps.ParkingSpot)
+                .Include(ps => ps.ParkingSpots)
                 .Where(v=>v.RegistrationNumber.Contains(RegistrationNumber));
         
                 return View(nameof(Collect), await model.ToListAsync());
@@ -100,9 +106,11 @@ namespace GarageThree.Controllers
         public async Task<IActionResult> Park([Bind("Id,OwnerId,RegistrationNumber,Passengers,Color,Wheels,VehicleTypeId")] Vehicle vehicle)
         {
 
+            
 
             if (ModelState.IsValid)
             {
+                
                 var ownerId = _context.Owners.Where(o => o.Id == vehicle.OwnerId);
                 if (!ownerId.Any()) // Select(v=>v).ToList(). TO DO VALIDATE FURTHER
                 {
@@ -126,17 +134,24 @@ namespace GarageThree.Controllers
                     ModelState.AddModelError("Age", "You are too young to park that Vehicle here, Find an older member to help you");
                     return View(vehicle);
                 }
+                
 
+                //WORK IN PROGRESS
                 var availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limit
-                // Should be _context.Parkinspots.CHECK FOR SIZE REQUIREMENTS ..... .ToList()...
-                //vehicle.ParkingSpot.Add(availibleParks); TODO add parking spots. Null reference.
+                //// Should be _context.Parkinspots.CHECK FOR SIZE REQUIREMENTS ..... .ToList()...
+                ////vehicle.ParkingSpot.Add(availibleParks); TODO add parking spots. Null reference.
+                ////availibleParks.Vehicles.Add(vehicle);
+                vehicle.ParkingSpots.Add(availibleParks);
+                ////var availibleParks = _context.VehicleParkingSpot.FirstOrDefault(); // Load the Graph? Jointable
 
-                availibleParks.Vehicles.Add(vehicle);
+                ////availibleParks.Vehicles = vehicle; //Attribute set SINGLE
+                ////availibleParks.Vehicles = new ICollection<Vehicle>(); Add in class.
 
-                //availibleParks.Add(vehicle);
+                //availibleParks.Vehicles.Add(vehicle); // List Add 
 
-                vehicle.ArrivalTime = DateTime.Now; // Set Independently
-                //_context.Add(vehicle);
+                //vehicle.ArrivalTime = DateTime.Now; // Set Independently
+                vehicle.ArrivalTime = DateTime.Now;
+
                 _context.Vehicles.Add(vehicle);
                 
                 await _context.SaveChangesAsync(); // readonly though??
@@ -182,7 +197,7 @@ namespace GarageThree.Controllers
                 MembershipId = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId).Id, // Bara Membership ID
                 Membership = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId), // Hela membership
                 VehicleType = v.VehicleType,
-                ParkingSpots = v.ParkingSpot
+                ParkingSpots = v.ParkingSpots
             });
 
             //var membershipID = _context.Owners.Where(Membership)

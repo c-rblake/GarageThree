@@ -23,7 +23,7 @@ namespace GarageThree.Data
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Membership> Memberships { get; set; }
         public DbSet<Owner> Owners { get; set; }
-        public DbSet<VehicleParkingSpot> Parkings { get; set; }
+        public DbSet<VehicleParkingSpot> VehicleParkingSpot { get; set; }
         public DbSet<ParkingSpot> ParkingSpots { get; set; }
         public DbSet<VehicleType> VehicleTypes { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
@@ -31,7 +31,7 @@ namespace GarageThree.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Vehicle>() 
-                .HasMany(v => v.ParkingSpot) 
+                .HasMany(v => v.ParkingSpots) 
                 .WithMany(ps => ps.Vehicles) 
                 .UsingEntity<VehicleParkingSpot>
                 (vps => vps.HasOne(p => p.ParkingSpot).WithMany(p => p.VehicleParkingSpots),

@@ -48,7 +48,7 @@
                 @Html.DisplayNameFor(model => model.VehicleType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ParkingSpot)
+                @Html.DisplayNameFor(model => model.ParkingSpots)
             </th>
             <th></th>
         </tr>
@@ -73,7 +73,7 @@
                     @Html.DisplayFor(modelItem => item.VehicleType.Id)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ParkingSpot)
+                    @Html.DisplayFor(modelItem => item.ParkingSpots)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

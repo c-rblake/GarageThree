@@ -20,7 +20,7 @@ namespace GarageThree.Data
             using (var db = services.GetRequiredService<GarageContext>())
             {
                 //TODO
-                if (await db.Owners.AnyAsync()) return; //IF any.
+                //if (await db.Owners.AnyAsync()) return; //IF any.
                 //if (await db.Memberships.AnyAsync()) return;
                 fake = new Faker("sv");
 
@@ -70,7 +70,7 @@ namespace GarageThree.Data
             {
                 var parking = new VehicleParkingSpot
                 {
-                    ParkingSpot = parkingSpots[ i],
+                    ParkingSpot = parkingSpots[i],
                     Vehicle = vehicles[rnd.Next(1, vehicles.Count)] // Ghost Cars can happen
                     //TODO MAPPING...
 
@@ -86,7 +86,7 @@ namespace GarageThree.Data
         {
             Random rnd = new Random();
             var vehicles = new List<Vehicle>();
-            int k = 5;
+            int k = 8;
             for (int i = 0; i < k; i++)
             {
                 var vehicle = new Vehicle
@@ -101,9 +101,6 @@ namespace GarageThree.Data
                     RegistrationNumber = fake.Lorem.Letter(3).ToUpper() + fake.Random.Number(100,999).ToString(),
                     Passengers = fake.Random.Int(6),
                     Wheels = fake.Random.Int(4,6)
-
-                    //TODO MAPPING...
-
                 };
                 
 
