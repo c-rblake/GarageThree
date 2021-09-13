@@ -74,7 +74,10 @@
                     @Html.DisplayFor(modelItem => item.VehicleType.Id)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ParkingSpots)
+                    @foreach (var spot in item.ParkingSpot)
+                    {
+                       <span> @spot.ParkingId</span>
+                    }
                 </td>
                 <td>
 

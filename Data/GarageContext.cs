@@ -31,7 +31,7 @@ namespace GarageThree.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Vehicle>() 
-                .HasMany(v => v.ParkingSpots) 
+                .HasMany(v => v.ParkingSpot) 
                 .WithMany(ps => ps.Vehicles) 
                 .UsingEntity<VehicleParkingSpot>
                 (vps => vps.HasOne(p => p.ParkingSpot).WithMany(p => p.VehicleParkingSpots),

@@ -29,13 +29,13 @@ namespace GarageThree.Controllers
 
         public async Task<IActionResult> ParkinSpots()
         {
-            var garageContext = _context.ParkingSpots.Include(p => p.Vehicles);
+            var garageContext = _context.ParkingSpots.Include(p => p.Vehicles).OrderBy(p => p.ParkingId);
             return View(await garageContext.ToListAsync());
         }
 
         public async Task<IActionResult> Collect()
         {
-            var garageContext = _context.Vehicles.Include(v => v.VehicleType).Include(ps => ps.ParkingSpots);
+            var garageContext = _context.Vehicles.Include(v => v.VehicleType).Include(ps => ps.ParkingSpot);
             return View(nameof(Collect), await garageContext.ToListAsync());
         }
 
@@ -45,7 +45,7 @@ namespace GarageThree.Controllers
             if (!String.IsNullOrWhiteSpace(RegistrationNumber))
             { 
                 var model = _context.Vehicles.Include(v => v.VehicleType)
-                .Include(ps => ps.ParkingSpots)
+                .Include(ps => ps.ParkingSpot)
                 .Where(v=>v.RegistrationNumber.Contains(RegistrationNumber));
         
                 return View(nameof(Collect), await model.ToListAsync());
@@ -194,7 +194,7 @@ namespace GarageThree.Controllers
                 
 
                 
-                TempData["Success"] = $"Vehicle {vehicle.RegistrationNumber} succesfully parked at Parking: {vehicle.ParkingSpots.FirstOrDefault().ParkingId}";
+                TempData["Success"] = $"Vehicle {vehicle.RegistrationNumber} succesfully parked at Parking: {vehicle.ParkingSpot.FirstOrDefault().ParkingId}";
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -238,7 +238,7 @@ namespace GarageThree.Controllers
                 MembershipId = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId).Id, // Bara Membership ID
                 Membership = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId), // Hela membership
                 VehicleType = v.VehicleType,
-                ParkingSpots = v.ParkingSpots
+                ParkingSpots = v.ParkingSpot
             });
 
             //var membershipID = _context.Owners.Where(Membership)

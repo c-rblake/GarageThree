@@ -154,7 +154,7 @@ namespace GarageThree.Data
         {
             var parkingSpots = new List<ParkingSpot>();
             int j = 20;
-            for (int i = 0; i < j; i++)
+            for (int i = 1; i <= j; i++)
             {
                 var parkingSpot = new ParkingSpot
                 {

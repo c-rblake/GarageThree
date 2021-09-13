@@ -30,10 +30,10 @@
                 @Html.DisplayFor(modelItem => item.ParkingId)
             </td>
             <td>
-                @*@foreach (var vehicle in item.Vehicles)
-                {
-                    @Html.DisplayFor(vehicle.RegistrationNumber)
-                }*@
+                 @foreach (var vehicle in item.Vehicles)
+                 {
+                     <span>@vehicle.RegistrationNumber</span>
+                 }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
