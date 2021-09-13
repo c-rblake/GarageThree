@@ -138,18 +138,7 @@ namespace GarageThree.Controllers
 
                 //WORK IN PROGRESS
                 var availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limit
-                //// Should be _context.Parkinspots.CHECK FOR SIZE REQUIREMENTS ..... .ToList()...
-                ////vehicle.ParkingSpot.Add(availibleParks); TODO add parking spots. Null reference.
-                ////availibleParks.Vehicles.Add(vehicle);
                 vehicle.ParkingSpots.Add(availibleParks);
-                ////var availibleParks = _context.VehicleParkingSpot.FirstOrDefault(); // Load the Graph? Jointable
-
-                ////availibleParks.Vehicles = vehicle; //Attribute set SINGLE
-                ////availibleParks.Vehicles = new ICollection<Vehicle>(); Add in class.
-
-                //availibleParks.Vehicles.Add(vehicle); // List Add 
-
-                //vehicle.ArrivalTime = DateTime.Now; // Set Independently
                 vehicle.ArrivalTime = DateTime.Now;
 
                 _context.Vehicles.Add(vehicle);

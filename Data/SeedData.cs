@@ -20,9 +20,12 @@ namespace GarageThree.Data
             using (var db = services.GetRequiredService<GarageContext>())
             {
                 //TODO
-                if (await db.Owners.AnyAsync()) return; //IF any.
-                //if (await db.Memberships.AnyAsync()) return;
                 fake = new Faker("sv");
+
+
+                if (await db.Vehicles.AnyAsync()) return; //IF any.
+                //if (await db.Memberships.AnyAsync()) return;
+                
 
                 //Owner => membership //Parkingspot //Vehicle types sist vehiclesparkingspot
 
@@ -51,9 +54,13 @@ namespace GarageThree.Data
                 await db.AddRangeAsync(vehicles);
                 await db.SaveChangesAsync();
 
+                
+
                 var vehicleParkingSpot = VehicleParkingSpots(vehicles, parkingSpots); // Ghost cars can happen..
                 await db.AddRangeAsync(vehicleParkingSpot);
                 await db.SaveChangesAsync();
+
+
 
             }
 
@@ -63,7 +70,6 @@ namespace GarageThree.Data
 
         private static List<VehicleParkingSpot> VehicleParkingSpots(List<Vehicle> vehicles, List<ParkingSpot> parkingSpots)
         {
-            Random rnd = new Random();
             var vehicleParkingSpots = new List<VehicleParkingSpot>();
             int k = 5;
             for (int i = 0; i < k; i++)
@@ -71,7 +77,7 @@ namespace GarageThree.Data
                 var parking = new VehicleParkingSpot
                 {
                     ParkingSpot = parkingSpots[i],
-                    Vehicle = vehicles[rnd.Next(1, vehicles.Count)] // Ghost Cars can happen
+                    Vehicle = vehicles[i] // Ghost Cars can happen
                     //TODO MAPPING...
 
                 };
@@ -84,26 +90,28 @@ namespace GarageThree.Data
 
 
         //FAILS TO SEED...
-        private static List<Vehicle> GetVehicles(List<Owner> owners, List<VehicleType> vehicleTypes)
+        private static List<Vehicle> GetVehicles(List<Owner> owners, List<VehicleType> vehicleTypes)// ,List<VehicleParkingSpot> parkingSpots
         {
-            Random rnd = new Random();
             var vehicles = new List<Vehicle>();
             int k = 8;
             for (int i = 0; i < k; i++)
             {
                 var vehicle = new Vehicle
                 {
-                    Owner = owners[i],
+                    Owner = owners[i%5],
                     // OwnerId = rnd.Next(1, owners.Count),
-                   // VehicleTypeId = rnd.Next(1, vehicleTypes.Count),
+                    // VehicleTypeId = rnd.Next(1, vehicleTypes.Count),
                     //VehicleType = vehicleTypes[i%5],
-                    VehicleType = vehicleTypes[0],
+                    VehicleType = vehicleTypes[i%5],
                     Color = fake.Commerce.Color(),
                     ArrivalTime = fake.Date.Recent(7),
                     Model = fake.Vehicle.Model(),
-                    RegistrationNumber = fake.Lorem.Letter(3).ToUpper() + fake.Random.Number(100,999).ToString(),
+                    RegistrationNumber = fake.Lorem.Letter(3).ToUpper() + fake.Random.Number(100, 999).ToString(),
                     Passengers = fake.Random.Int(6),
-                    Wheels = fake.Random.Int(4,6)
+                    Wheels = fake.Random.Int(4, 6)
+                    
+                    //ParkingSpots = new ParkingSpot { ParkingId = i};
+
                     //ParkingSpots
                 };
                 
@@ -115,10 +123,42 @@ namespace GarageThree.Data
             return vehicles;
         }
 
+
+        private static ICollection<Vehicle> MakeVehicles()
+        {
+            var vehicles = new List<Vehicle>();
+            int k = 8;
+            for (int i = 0; i < k; i++)
+            {
+                var vehicle = new Vehicle
+                {
+                    //Owner = owners[i],
+                    // OwnerId = owners[i].Id,
+                    // VehicleTypeId = rnd.Next(1, vehicleTypes.Count),
+                    //VehicleType = vehicleTypes[i%5],
+                    //VehicleType = vehicleTypes[0],
+                    OwnerId = 1,
+                    Color = fake.Commerce.Color(),
+                    ArrivalTime = fake.Date.Recent(7),
+                    Model = fake.Vehicle.Model(),
+                    RegistrationNumber = fake.Lorem.Letter(3).ToUpper() + fake.Random.Number(100, 999).ToString(),
+                    Passengers = fake.Random.Int(6),
+                    Wheels = fake.Random.Int(4, 6),
+                };
+
+
+                vehicles.Add(vehicle);
+            }
+
+
+            return vehicles;
+
+        }
+
         private static List<ParkingSpot> GetParkingSpots()
         {
             var parkingSpots = new List<ParkingSpot>();
-            int j = 5;
+            int j = 20;
             for (int i = 0; i < j; i++)
             {
                 var parkingSpot = new ParkingSpot
