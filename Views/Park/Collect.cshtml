@@ -79,7 +79,8 @@
                 <td>
 
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Receipt" asp-route-id="@item.Id">Collect and Receipt</a>
+                    <a asp-action="Receipt" asp-route-id="@item.Id">Collect and Receipt(delete cascade)</a>|
+                    <a asp-action="Unpark" asp-route-id="@item.Id">UNPARK vehicle</a>
                 </td>
             </tr>
         }

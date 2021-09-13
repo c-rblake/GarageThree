@@ -151,10 +151,34 @@ namespace GarageThree.Controllers
                 var availibleParks2 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).Where(ps => ps.Id == 2).FirstOrDefault(); // Works 2nd returned
 
                 var availibleParks3 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots.Where(vps=> vps.Vehicle == null)).FirstOrDefault(); // Works
-                var availibleParks4 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots)
-                    .Where(ps => ps.VehicleParkingSpots == null)
-                    .FirstOrDefault(); // Works
+                
+                var availibleParks4 = _context.ParkingSpots
+                    .Include(ps => ps.VehicleParkingSpots)
+                    .Where(ps => ps.VehicleParkingSpots.Count == 0)
+                    .FirstOrDefault(); 
 
+                var allParkings = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).ToList();
+
+                //allParkings.Count > 20; NoContent PARKING Loop to 20.
+
+
+                //int maxParking = 0;
+                //for (int i = 0; i < 20; i++)
+                //{
+                //    maxParking = allParkings[i].ParkingId; // => 14,13,12....
+
+                //}
+
+                
+
+                //foreach (var parking in allParkings)
+                //{
+                //    if(parking.ParkingId > maxParking)
+                //    {
+                //        maxParking = parking.ParkingId;
+                //    }
+
+                ////}
 
 
                 var newParking = new VehicleParkingSpot
@@ -349,11 +373,16 @@ namespace GarageThree.Controllers
             {
                 return NotFound();
             }
+            var vehicle = await _context.Vehicles.Where(v => v.Id == id).FirstOrDefaultAsync();
+            var vehicleParkingSpots = await _context.VehicleParkingSpot.Where(vps => vps.VehicleId == id).ToListAsync();
+            //if null??
+            _context.VehicleParkingSpot.RemoveRange(vehicleParkingSpots);
+            _context.SaveChanges();
 
-            var vehicle = await _context.Vehicles
-                .Include(v => v.VehicleType)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicle == null)
+            //var vehicle = await _context.Vehicles
+            //    .Include(v => v.VehicleType)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            if (vehicleParkingSpots == null)
             {
                 return NotFound();
             }
