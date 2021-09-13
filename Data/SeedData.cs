@@ -107,7 +107,7 @@ namespace GarageThree.Data
                     ArrivalTime = fake.Date.Recent(7),
                     Model = fake.Vehicle.Model(),
                     RegistrationNumber = fake.Lorem.Letter(3).ToUpper() + fake.Random.Number(100, 999).ToString(),
-                    Passengers = fake.Random.Int(6),
+                    Passengers = fake.Random.Int(1,6),
                     Wheels = fake.Random.Int(4, 6)
                     
                     //ParkingSpots = new ParkingSpot { ParkingId = i};
@@ -132,11 +132,6 @@ namespace GarageThree.Data
             {
                 var vehicle = new Vehicle
                 {
-                    //Owner = owners[i],
-                    // OwnerId = owners[i].Id,
-                    // VehicleTypeId = rnd.Next(1, vehicleTypes.Count),
-                    //VehicleType = vehicleTypes[i%5],
-                    //VehicleType = vehicleTypes[0],
                     OwnerId = 1,
                     Color = fake.Commerce.Color(),
                     ArrivalTime = fake.Date.Recent(7),

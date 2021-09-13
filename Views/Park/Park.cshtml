@@ -6,24 +6,25 @@
     ViewData["Title"] = "Park";
 }
 
-<h1>Create</h1>
+<h1>Park your Vehicle</h1>
 
-<h4>Vehicle</h4>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Park">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="OwnerId" class="control-label">Owner # Todo Hashed or otherwise random value</label>
-                @* SEEMS LIKE A BAD IDEA TO HAVE THIS... <select asp-for="OwnerId" class ="form-control" asp-items=@await developmentService.DevelopmentGetOwners();></select>*@
+                <label asp-for="OwnerId" class="control-label">Your Owner ID</label>
+                
                 <input asp-for="OwnerId" class="form-control" />
                 <span asp-validation-for="OwnerId" class="text-danger"></span>
                 <div>
-                    <a asp-action="Index">Back to List</a>
+                    <span>If you are not a Member </span>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="OwnerMembershipSignups" asp-action="Signup">Signup</a>
                 </div>
             </div>
-            @*TODO*@---TODO : CLICK HERE TO SIGN UP---- <br />
+            @*TODO*@---REGISTER A NEW VEHICLE---- <br />
             <div class="form-group">
                 <label asp-for="RegistrationNumber" class="control-label"></label>
                 <input asp-for="RegistrationNumber" class="form-control" />

@@ -241,6 +241,7 @@ namespace GarageThree.Controllers
                 return NotFound();
             }
             var member = _context.Memberships.Find(id);
+            //var member = _context.Owners.FirstOrDefaultAsync(o => o.Id == member.Id);
             if (member == null)
             {
                 return NotFound();
