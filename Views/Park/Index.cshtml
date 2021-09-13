@@ -4,26 +4,35 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    REGISTER NEW MEMBER
-</p>
+@*<h1>Welcome to Garage 3.0</h1>*@
 
 
-<p>
-    <a asp-action="Park">Park New</a>
-    <a asp-action="ReceiptsOverView">ReceiptsOverView</a>
-</p>
+@if (TempData["Success"] != null)
+{
+    <div class="index-options text-center text-success" id="threeSeconds">
+        <H1>@TempData["Success"].ToString()</H1>
+    </div>
+}
 
-<div class="container">
-    <div class="row d-flex justify-content-center">
+@if (TempData["Unpark"] != null)
+{
+    <div class="index-options text-center text-success" id="threeSeconds">
+        <H1>@TempData["Unpark"].ToString()</H1>
+    </div>
+}
+
+
+
+
+
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center mt-5">
         <div class="col-md-8 md-1">
             <div class="card-deck mb-3 text-center">
                 <div class="card mb-4 box-shadow">
                     <div class="card-header">
                         <button class="btn btn-primary btn-lg" onclick="window.location.href='/Park/Park'"><h1 class="my-0 font-weight-normal mx-3">Park</h1></button>
-                    </div> 
+                    </div>
                     <div class="card-body">
                         <h4 class="card-title pricing-card-title">1 SEK <small class="text-muted">/ min</small></h4>
                         <ul class="list-unstyled mt-3 mb-4">
@@ -34,7 +43,7 @@
                 </div>
                 <div class="card mb-4 box-shadow">
                     <div class="card-header">
-                        <button class="btn btn-primary btn-lg" onclick="window.location.href='/Park/Index2'"><h1 class="my-0 font-weight-normal">Collect</h1></button>
+                        <button class="btn btn-primary btn-lg" onclick="window.location.href='/Park/Collect'"><h1 class="my-0 font-weight-normal">Collect</h1></button>
                     </div>
                     <div class="card-body">
                         <ul class="list-unstyled mt-3 mb-4">
@@ -49,7 +58,7 @@
     </div>
 </div>
 
-<div class="container container-table">
+@*<div class="container container-table">
     <div class="row vertical-center-row">
         <div class="text-center col-md-4 col-md-offset-4" style="background:red">Super Helpful Helper Table Could Be a Partial View Instead..</div>
     </div>
@@ -80,34 +89,35 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegistrationNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Passengers)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Wheels)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VehicleType.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArrivalTime)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Unpark" asp-route-id="@item.Id">Unpark</a>
-                <a asp-action="Receipt" asp-route-id="@item.Id">Receipt</a>
-                
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegistrationNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Passengers)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Wheels)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleType.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ArrivalTime)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Unpark" asp-route-id="@item.Id">Unpark</a>
+                    <a asp-action="Receipt" asp-route-id="@item.Id">Receipt</a>
+
+                </td>
+            </tr>
+        }
     </tbody>
-</table>
+</table>*@

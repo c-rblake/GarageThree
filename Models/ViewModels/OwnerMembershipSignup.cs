@@ -5,12 +5,21 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GarageThree.Models
+namespace GarageThree.Models.ViewModels
 {
-    public class Membership
+    public class OwnerMembershipSignup
+        // Vehicle not included because of the 18 yr limit
     {
         public int Id { get; set; }
-        public int OwnerId { get; set; }
+
+        //[CheckFirstAndLastNames]
+        public string FirstName { get; set; }
+        //[CheckFirstAndLastNames]
+        public string LastName { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
+        public int Age { get; set; }
+        public string Phone { get; set; }
+
         public string PhoneNumber { get; set; }
 
         [Required]
@@ -23,7 +32,5 @@ namespace GarageThree.Models
         //public string LastName { get; set; }
         public DateTime RegistrationTime { get; set; }
 
-
-        public Owner Owner { get; set; }
     }
 }

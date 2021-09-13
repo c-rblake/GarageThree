@@ -18,7 +18,7 @@
             </select>*@
         </div>
         <div class="input-group-append">
-            <button type="submit" class="btn btn-primary btn-outline-secondary" id="search-btn">Search</button>
+            <button type="submit" class="btn btn-primary btn-outline-secondary" id="search-btn"><i class="fa fa-search">&emsp;Search</i></button>
         </div>
     </div>
 </form>
@@ -52,6 +52,7 @@
                     @Html.DisplayFor(modelItem => item.VehicleCount)
                 </td>
                 <td>
+                    THESE EDIT AND DELETE CONTROLLERS GO TO PARKING SINCE THEY ARE ON THE PARK CONTROLLER NOW. EDIT MEMBER REMOVE MEMBER METHODS NEEDED
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="MemberDetails" asp-route-id="@item.Id">MemberDetails</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>

@@ -1,0 +1,88 @@
+﻿
+@model IEnumerable<GarageThree.Models.Vehicle>
+
+@{
+    ViewData["Title"] = "Collect";
+}
+
+<h1>Collect Vehicle</h1>
+
+
+@if (TempData["Empty"] != null)
+{
+<p class="text-danger">@TempData["Empty"].ToString()</p>
+
+}
+
+
+<form asp-action="FilterCollect" method="get">
+    <div class="input-group mb-3">
+        <input type="text" name="RegistrationNumber" class="form-control" placeholder="Search on Registration Number...">
+        <div class="input-group-append">
+            @*<select name="vehicleType" asp-items="@Html.GetEnumSelectList<VehicleTypes>()" class="form-control">
+                    <option selected="selected" value="">All Types of Vehicles</option>
+                </select>*@
+        </div>
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary btn-outline-secondary" id="search-btn"><i class="fa fa-search">&emsp;Search</i></button>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RegistrationNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Passengers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Color)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Wheels)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VehicleType)
+            </th>
+            <th>
+                @*Html.DisplayNameFor(model => model.ParkingSpots)*@
+                Parking Spot
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegistrationNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Passengers)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Wheels)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleType.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParkingSpots)
+                </td>
+                <td>
+
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Receipt" asp-route-id="@item.Id">Collect and Receipt(delete cascade)</a>|
+                    <a asp-action="Unpark" asp-route-id="@item.Id">UNPARK vehicle</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

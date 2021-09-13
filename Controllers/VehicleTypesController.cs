@@ -67,8 +67,10 @@ namespace GarageThree.Controllers
                     ReqparkingSpots = vehicleTypCreateViewModel.ReqparkingSpots
                 };
                 _context.Add(vehicleType);
+                TempData["Success"] = $"Vehicle Type {vehicleType.TypeName} Succesfully Added to Database.";
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                
+                return RedirectToAction("Park", "Park");
             }
             return View(vehicleTypCreateViewModel);
         }

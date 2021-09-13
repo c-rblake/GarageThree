@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,13 +21,13 @@ namespace GarageThree.Models
         public DateTime ArrivalTime { get; set; }
         //Foreign Key
         public int VehicleTypeId { get; set; }
-
+        
         //Navigation Properties
         public VehicleType VehicleType { get; set; }
         public Owner Owner { get; set; }
 
-        public ICollection<ParkingSpot> ParkingSpot { get; set; }
+        //[DisplayName("Parking Spot")]
+        public ICollection<ParkingSpot> ParkingSpots = new List<ParkingSpot>();
         public ICollection<VehicleParkingSpot> VehicleParkingSpots { get; set; }
-        //public object ParkingSpots { get; internal set; }
     }
 }

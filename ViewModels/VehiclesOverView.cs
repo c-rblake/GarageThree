@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace GarageThree.ViewModels
 {
 
-        public class VehiclesOverView
-        {
-            public int Id { get; set; }
-            public VehicleType VehicleType { get; set; }
-            public string Regnum { get; set; }
-            public DateTime Arrivaldate { get; set; }
+    public class VehiclesOverView
+    {
+        public int Id { get; set; }
+        public VehicleType VehicleType { get; set; }
+        public string Regnum { get; set; }
+        public DateTime Arrivaldate { get; set; }
 
-            public TimeSpan ParkedTime { get; set; }
+        public TimeSpan ParkedTime { get; set; }
         public string Model { get; internal set; }
 
         public int OwnerID { get; set; }
@@ -22,7 +22,7 @@ namespace GarageThree.ViewModels
 
         public Membership Membership { get; set; }
 
-        
+        public ICollection<ParkingSpot> ParkingSpots { get; set; }
 
 
     }

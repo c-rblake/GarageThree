@@ -13,7 +13,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GarageThree</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Park" asp-action="Index">GarageThree</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -21,25 +21,19 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Park" asp-action="OverView">Vehicle Overview</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Park" asp-action="MembersOverview">Members Overview</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Park" asp-action="Index">Park</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="OwnerMembershipSignups" asp-action="Signup">Membership</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Park" asp-action="Overview">Overview</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Park" asp-action="ReceiptsOverView">Receipts Overview</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Park" asp-action="MembersOverview">MembersOverview</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="VehicleTypes" asp-action="Create">Add New Vehicletype</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Memberships" asp-action="Create">Membership</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Park" asp-action="ParkinSpots">Parking Spots</a>
                         </li>
                     </ul>
                 </div>

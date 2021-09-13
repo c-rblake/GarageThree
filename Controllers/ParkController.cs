@@ -27,11 +27,49 @@ namespace GarageThree.Controllers
             return View(await garageContext.ToListAsync());
         }
 
-        public async Task<IActionResult> Index2()
+        public async Task<IActionResult> ParkinSpots()
         {
-            var garageContext = _context.Vehicles.Include(v => v.VehicleType).Include(ps => ps.ParkingSpot);
-            return View(nameof(Index2), await garageContext.ToListAsync());
+            var garageContext = _context.ParkingSpots.Include(p => p.Vehicles);
+            return View(await garageContext.ToListAsync());
         }
+
+        public async Task<IActionResult> Collect()
+        {
+            var garageContext = _context.Vehicles.Include(v => v.VehicleType).Include(ps => ps.ParkingSpots);
+            return View(nameof(Collect), await garageContext.ToListAsync());
+        }
+
+        public async Task<IActionResult> FilterCollect(string RegistrationNumber = null)
+        {
+            //Todo if RegistrationNumber = null do nothing
+            if (!String.IsNullOrWhiteSpace(RegistrationNumber))
+            { 
+                var model = _context.Vehicles.Include(v => v.VehicleType)
+                .Include(ps => ps.ParkingSpots)
+                .Where(v=>v.RegistrationNumber.Contains(RegistrationNumber));
+        
+                return View(nameof(Collect), await model.ToListAsync());
+            }
+
+            TempData["Empty"] = "Registration number could not be found"; //BUGGY
+            //if (model.Count() == 0)
+            //{
+            //    TempData["Empty"] = "Registration number could not be found";
+            //    Console.WriteLine("funkar");
+            //}
+            //model = RegistrationNumber == null ? model : model.Where(v=>v.RegistrationNumber=="helo"); Not allowed
+
+            //Todo Dropdown logic.
+
+            return RedirectToAction(nameof(Collect));
+        }
+
+        public async Task<IActionResult> SignUp()
+        {
+            return View();
+        }
+
+
 
         // GET: Park/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -68,19 +106,96 @@ namespace GarageThree.Controllers
         public async Task<IActionResult> Park([Bind("Id,OwnerId,RegistrationNumber,Passengers,Color,Wheels,VehicleTypeId")] Vehicle vehicle)
         {
 
+            
 
             if (ModelState.IsValid)
             {
+                
+                var ownerId = _context.Owners.Where(o => o.Id == vehicle.OwnerId);
+                if (!ownerId.Any()) // Select(v=>v).ToList(). TO DO VALIDATE FURTHER
+                {
+                    // TODO SWAP TO DEPENDECY INJECTION-
+                    ModelState.AddModelError("OwnerId", "New to the Garage? Sign up here");
+                    return View(vehicle);
+                }
                 if (_context.Vehicles.Where(v=>v.RegistrationNumber.Contains(vehicle.RegistrationNumber)).Count()>0) // Select(v=>v).ToList().
                 {
                     // TODO SWAP TO DEPENDECY INJECTION-
                     ModelState.AddModelError("RegistrationNumber", "Registration number must be unique");
                     return View(vehicle);
                 }
+                var ageVehicleAbove18 = _context.Owners
+                    .Include(o => o.Vehicles.Where(v => v.Id == vehicle.Id)) // Query Vehicle
+                    .FirstOrDefault().Age >= 18; //Query Owner
 
-                _context.Add(vehicle);
-                vehicle.ArrivalTime = DateTime.Now; // Set Independently
-                await _context.SaveChangesAsync(); // readonly though??
+
+                if (!ageVehicleAbove18) 
+                {
+                    ModelState.AddModelError("Age", "You are too young to park that Vehicle here, Find an older member to help you");
+                    return View(vehicle);
+                }
+
+                vehicle.ArrivalTime = DateTime.Now;
+                _context.Vehicles.Add(vehicle);
+
+                //WORK IN PROGRESS
+                //var availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limitvar availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limit
+                                                                             // Write function that returns first empty spot
+                                                                             // .Include(ps => !ps.VehicleParkingSpot.Any())
+                                                                             // return 
+
+
+                //var availibleParks = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).Where(ps => ps.VehicleParkingSpots == null).FirstOrDefault();
+                var availibleParks = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).FirstOrDefault(); // NR0 returned.
+
+                var availibleParks2 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).Where(ps => ps.Id == 2).FirstOrDefault(); // Works 2nd returned
+
+                var availibleParks3 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots.Where(vps=> vps.Vehicle == null)).FirstOrDefault(); // Works
+                
+                var availibleParks4 = _context.ParkingSpots
+                    .Include(ps => ps.VehicleParkingSpots)
+                    .Where(ps => ps.VehicleParkingSpots.Count == 0)
+                    .FirstOrDefault(); 
+
+                var allParkings = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).ToList();
+
+                //allParkings.Count > 20; NoContent PARKING Loop to 20.
+
+
+                //int maxParking = 0;
+                //for (int i = 0; i < 20; i++)
+                //{
+                //    maxParking = allParkings[i].ParkingId; // => 14,13,12....
+
+                //}
+
+                
+
+                //foreach (var parking in allParkings)
+                //{
+                //    if(parking.ParkingId > maxParking)
+                //    {
+                //        maxParking = parking.ParkingId;
+                //    }
+
+                ////}
+
+
+                var newParking = new VehicleParkingSpot
+                {
+                    ParkingSpot = availibleParks4,
+                    Vehicle = vehicle
+                };
+
+
+                _context.Add(newParking);
+                //if VehicleParkinSpot
+                //vehicle.ParkingSpots.Add(availibleParks);
+                
+
+                
+                TempData["Success"] = $"Vehicle {vehicle.RegistrationNumber} succesfully parked at Parking: {vehicle.ParkingSpots.FirstOrDefault().ParkingId}";
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             // TODO SWAP TO DEPENDECY INJECTION-
@@ -122,7 +237,8 @@ namespace GarageThree.Controllers
                 OwnerID = v.OwnerId, // Todo Ej i ASP Vy
                 MembershipId = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId).Id, // Bara Membership ID
                 Membership = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId), // Hela membership
-                VehicleType = v.VehicleType
+                VehicleType = v.VehicleType,
+                ParkingSpots = v.ParkingSpots
             });
 
             //var membershipID = _context.Owners.Where(Membership)
@@ -177,6 +293,7 @@ namespace GarageThree.Controllers
                 return NotFound();
             }
             var member = _context.Memberships.Find(id);
+            //var member = _context.Owners.FirstOrDefaultAsync(o => o.Id == member.Id);
             if (member == null)
             {
                 return NotFound();
@@ -193,7 +310,7 @@ namespace GarageThree.Controllers
                 Id= ov.Id,
                 FirstName = ov.FirstName,
                 LastName = ov.LastName,
-                Vehicles = (List<Vehicle>)ov.Vehicles
+                Vehicles = ov.Vehicles
             });
 
             return View(await model.ToListAsync()); // await
@@ -256,11 +373,16 @@ namespace GarageThree.Controllers
             {
                 return NotFound();
             }
+            var vehicle = await _context.Vehicles.Where(v => v.Id == id).FirstOrDefaultAsync();
+            var vehicleParkingSpots = await _context.VehicleParkingSpot.Where(vps => vps.VehicleId == id).ToListAsync();
+            //if null??
+            _context.VehicleParkingSpot.RemoveRange(vehicleParkingSpots);
+            _context.SaveChanges();
 
-            var vehicle = await _context.Vehicles
-                .Include(v => v.VehicleType)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicle == null)
+            //var vehicle = await _context.Vehicles
+            //    .Include(v => v.VehicleType)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            if (vehicleParkingSpots == null)
             {
                 return NotFound();
             }
@@ -293,6 +415,10 @@ namespace GarageThree.Controllers
                 CollecTime = DateTime.Now,
                 Price = ((short)(DateTime.Now - vehicle.ArrivalTime).TotalMinutes) * 1
             };
+
+            TempData["Unpark"] = $"Vehicle {model.Regnum} Successfully Unparked";
+
+
             _context.Receipts.Add(receipt); //There is still only ONE database Call.
             _context.SaveChanges(); // Save changes
 
