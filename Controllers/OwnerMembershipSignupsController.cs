@@ -58,7 +58,11 @@ namespace GarageThree.Controllers
                 _context.Add(owner);
                 await _context.SaveChangesAsync();
                 if (ownerMembershipSignup.Age >= 18)
-                    return RedirectToAction("Create", "Vehicles");
+                {
+                    TempData["OwnerID"] = owner.Id;
+                    return RedirectToAction("Park", "Park");
+                }
+                    
                 //RedirectToAction("actionName", "controllerName"
                 return RedirectToAction("Index","Park");
 

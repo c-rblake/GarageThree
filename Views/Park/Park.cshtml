@@ -6,58 +6,81 @@
     ViewData["Title"] = "Park";
 }
 
-<h1>Park your Vehicle</h1>
+
+
+
+<h1 class="row d-flex justify-content-center">Park Your Vehicle <i class="fa fa-car fa-2x ml-2"></i></h1>
 
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Park">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="OwnerId" class="control-label">Your Owner ID</label>
-                
-                <input asp-for="OwnerId" class="form-control" />
-                <span asp-validation-for="OwnerId" class="text-danger"></span>
-                <div>
-                    <span>If you are not a Member </span>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="OwnerMembershipSignups" asp-action="Signup">Signup</a>
-                </div>
-            </div>
-            @*TODO*@---REGISTER A NEW VEHICLE---- <br />
-            <div class="form-group">
-                <label asp-for="RegistrationNumber" class="control-label"></label>
-                <input asp-for="RegistrationNumber" class="form-control" />
-                <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Passengers" class="control-label"></label>
-                <input asp-for="Passengers" class="form-control" />
-                <span asp-validation-for="Passengers" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Color" class="control-label"></label>
-                <input asp-for="Color" class="form-control" />
-                <span asp-validation-for="Color" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Wheels" class="control-label"></label>
-                <input asp-for="Wheels" class="form-control" />
-                <span asp-validation-for="Wheels" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="VehicleTypeId" class="control-label">Vehicle Type</label>
-                <select asp-for="VehicleTypeId" class ="form-control" asp-items=@await service.GetVehicleTypesAsync();></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Park" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8 md-1">
+            <form asp-action="Park">
+                <div class="row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group col-md-12 mb-3">
+                        <label asp-for="OwnerId" class="control-label"><b>Your Owner ID</b></label>
+                        @if (TempData["OwnerID"] != null)
+                        {
+                            <div class="index-options text-center text-success">
+                                <p>Your ownder id is: @TempData["OwnerID"].ToString()</p>
+                            </div>
+                        }
+                        <input asp-for="OwnerId" class="form-control" value="@TempData["OwnerID"]" />
+                        <span asp-validation-for="OwnerId" class="text-danger"></span>
+                        <div>
+                            <span>
+                                If you are not a Member <a class="nav-link" asp-area="" asp-controller="OwnerMembershipSignups" asp-action="Signup">Signup Here</a>
+                            </span>
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="form-group col-md-6 mb-3">
+                        <div>@*TODO*@---<b>REGISTER A NEW VEHICLE</b>----</div>
+                        <label asp-for="RegistrationNumber" class="control-label"></label>
+                        <input asp-for="RegistrationNumber" class="form-control" />
+                        <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label asp-for="Passengers" class="control-label"></label>
+                        <input asp-for="Passengers" class="form-control" />
+                        <span asp-validation-for="Passengers" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label asp-for="Color" class="control-label"></label>
+                        <input asp-for="Color" class="form-control" />
+                        <span asp-validation-for="Color" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 mb-3">
+                        <label asp-for="Wheels" class="control-label"></label>
+                        <input asp-for="Wheels" class="form-control" />
+                        <span asp-validation-for="Wheels" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6 mb-3">
+                        <label asp-for="VehicleTypeId" class="control-label">Vehicle Type</label>
+                        <select asp-for="VehicleTypeId" class="form-control" asp-items=@await service.GetVehicleTypesAsync();></select>
+                    </div>
+                </div>
+                <div>
+                    <p>Your Arrival Time: @DateTime.Now</p>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Park Vehicle" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div>
+        <a asp-action="Index"><i>Back to Main Menu</i></a>
+    </div>
 </div>
 
 @section Scripts {
