@@ -68,7 +68,7 @@ namespace GarageThree.Controllers
                 };
                 _context.Add(vehicleType);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Park", "Park");
             }
             return View(vehicleTypCreateViewModel);
         }

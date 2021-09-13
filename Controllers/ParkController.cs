@@ -134,7 +134,7 @@ namespace GarageThree.Controllers
                     ModelState.AddModelError("Age", "You are too young to park that Vehicle here, Find an older member to help you");
                     return View(vehicle);
                 }
-                
+
 
                 //WORK IN PROGRESS
                 var availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limit
@@ -142,8 +142,8 @@ namespace GarageThree.Controllers
                 vehicle.ArrivalTime = DateTime.Now;
 
                 _context.Vehicles.Add(vehicle);
-                
-                await _context.SaveChangesAsync(); // readonly though??
+                TempData["Success"] = $"Vehicle {vehicle.RegistrationNumber} succesfully parked at Parking: {vehicle.ParkingSpots.FirstOrDefault().ParkingId}";
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             // TODO SWAP TO DEPENDECY INJECTION-
