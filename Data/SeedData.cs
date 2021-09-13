@@ -20,7 +20,7 @@ namespace GarageThree.Data
             using (var db = services.GetRequiredService<GarageContext>())
             {
                 //TODO
-                //if (await db.Owners.AnyAsync()) return; //IF any.
+                if (await db.Owners.AnyAsync()) return; //IF any.
                 //if (await db.Memberships.AnyAsync()) return;
                 fake = new Faker("sv");
 
