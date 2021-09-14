@@ -106,8 +106,6 @@ namespace GarageThree.Controllers
         public async Task<IActionResult> Park([Bind("Id,OwnerId,RegistrationNumber,Passengers,Color,Wheels,VehicleTypeId")] Vehicle vehicle)
         {
 
-            
-
             if (ModelState.IsValid)
             {
                 
@@ -127,7 +125,6 @@ namespace GarageThree.Controllers
                 var ageVehicleAbove18 = _context.Owners
                     .Include(o => o.Vehicles.Where(v => v.Id == vehicle.Id)) // Query Vehicle
                     .FirstOrDefault().Age >= 18; //Query Owner
-
 
                 if (!ageVehicleAbove18) 
                 {
