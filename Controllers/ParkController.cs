@@ -106,8 +106,6 @@ namespace GarageThree.Controllers
         public async Task<IActionResult> Park([Bind("Id,OwnerId,RegistrationNumber,Passengers,Color,Wheels,VehicleTypeId")] Vehicle vehicle)
         {
 
-            
-
             if (ModelState.IsValid)
             {
                 
@@ -138,14 +136,6 @@ namespace GarageThree.Controllers
                 vehicle.ArrivalTime = DateTime.Now;
                 _context.Vehicles.Add(vehicle);
 
-                //WORK IN PROGRESS
-                //var availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limitvar availibleParks = _context.ParkingSpots.FirstOrDefault(); // ToDo validate and Limit
-                                                                             // Write function that returns first empty spot
-                                                                             // .Include(ps => !ps.VehicleParkingSpot.Any())
-                                                                             // return 
-
-
-                //var availibleParks = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).Where(ps => ps.VehicleParkingSpots == null).FirstOrDefault();
                 var availibleParks = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).FirstOrDefault(); // NR0 returned.
 
                 var availibleParks2 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).Where(ps => ps.Id == 2).FirstOrDefault(); // Works 2nd returned
@@ -159,41 +149,14 @@ namespace GarageThree.Controllers
 
                 var allParkings = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).ToList();
 
-                //allParkings.Count > 20; NoContent PARKING Loop to 20.
-
-
-                //int maxParking = 0;
-                //for (int i = 0; i < 20; i++)
-                //{
-                //    maxParking = allParkings[i].ParkingId; // => 14,13,12....
-
-                //}
-
-                
-
-                //foreach (var parking in allParkings)
-                //{
-                //    if(parking.ParkingId > maxParking)
-                //    {
-                //        maxParking = parking.ParkingId;
-                //    }
-
-                ////}
-
-
                 var newParking = new VehicleParkingSpot
                 {
                     ParkingSpot = availibleParks4,
                     Vehicle = vehicle
                 };
 
-
                 _context.Add(newParking);
-                //if VehicleParkinSpot
-                //vehicle.ParkingSpots.Add(availibleParks);
-                
-
-                
+                              
                 TempData["Success"] = $"Vehicle {vehicle.RegistrationNumber} succesfully parked at Parking: {vehicle.ParkingSpot.FirstOrDefault().ParkingId}";
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -202,6 +165,45 @@ namespace GarageThree.Controllers
             ViewData["VehicleTypeId"] = new SelectList(_context.VehicleTypes, "Id", "Id", vehicle.VehicleTypeId);
             ViewData["OwnerId"] = new SelectList(_context.Owners, "Id", "Id", vehicle.OwnerId); // Id Value, Text
             return View(vehicle);
+        }
+
+
+        public async Task<IActionResult> ParkExisting(int? Id)  //Asp item Vehicle.OwnerID
+        {
+            //var model = _context.Owners
+            //    .Include(o => o.Vehicles)
+            //    .Where(o => o.Id == OwnerID);
+
+            var vehicles = _context.Vehicles.Where(v=> v.Id == Id); // Get Vehicles
+
+            var vehicle = vehicles.FirstOrDefault(); // First Vehicle
+
+            //  await Park(vehicle2);
+
+            vehicle.ArrivalTime = DateTime.Now;
+
+            var availibleParks4 = _context.ParkingSpots
+    .Include(ps => ps.VehicleParkingSpots)
+    .Where(ps => ps.VehicleParkingSpots.Count == 0)
+    .FirstOrDefault();
+
+            var newParking = new VehicleParkingSpot
+            {
+                ParkingSpot = availibleParks4,
+                Vehicle = vehicle
+            };
+
+            _context.Add(newParking);
+
+            await _context.SaveChangesAsync();
+
+
+
+
+
+            //some temp data
+
+            return RedirectToAction("Overview","Park");
         }
 
         // GET: Park/Edit/5
@@ -234,7 +236,7 @@ namespace GarageThree.Controllers
                 Arrivaldate = v.ArrivalTime,
                 ParkedTime = (DateTime.Now - v.ArrivalTime),
                 //3.0
-                OwnerID = v.OwnerId, // Todo Ej i ASP Vy
+                OwnerID = v.OwnerId, 
                 MembershipId = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId).Id, // Bara Membership ID
                 Membership = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId), // Hela membership
                 VehicleType = v.VehicleType,
@@ -261,7 +263,7 @@ namespace GarageThree.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FilterMembers(string email = null) // HTML input name="regnum" // [Bind("Id,OwnerId,VehicleTypeId")], Vehicle vehicle
+        public async Task<IActionResult> FilterMembers(string email = null)
         {
             var model = _context.Memberships.Select(m => new MembersOverview
             {
@@ -292,8 +294,9 @@ namespace GarageThree.Controllers
             {
                 return NotFound();
             }
-            var member = _context.Memberships.Find(id);
-            //var member = _context.Owners.FirstOrDefaultAsync(o => o.Id == member.Id);
+            //var member = _context.Memberships.Find(id); //Threading issues
+            var member = _context.Memberships.Where(m => m.Id == id).FirstOrDefaultAsync();
+
             if (member == null)
             {
                 return NotFound();
@@ -301,9 +304,6 @@ namespace GarageThree.Controllers
             var owner = _context.Owners.FirstOrDefaultAsync(o => o.Id == member.Id);
             //var vehicles = _context.Vehicles.Where(v => v.OwnerId == owner.Id).ToList();
             var vehicles2 = _context.Owners.Include(o => o.Vehicles).Where(o => o.Id == member.Id);
-
-            //.Include(v => v.VehicleType)
-            //.FirstOrDefaultAsync(m => m.Id == id);
 
             var model = vehicles2.Select(ov => new OwnerVehicleView {
 

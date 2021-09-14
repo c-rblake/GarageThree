@@ -35,7 +35,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.VehicleCount)
             </th>
-            <th></th>
+            <th>THESE EDIT AND DELETE routings GO TO Vehicle SINCE THEY ARE ON THE PARK CONTROLLER.  EDIT MEMBER REMOVE MEMBER METHODS NEEDED</th>
         </tr>
     </thead>
     <tbody>
@@ -52,7 +52,6 @@
                     @Html.DisplayFor(modelItem => item.VehicleCount)
                 </td>
                 <td>
-                    THESE EDIT AND DELETE CONTROLLERS GO TO PARKING SINCE THEY ARE ON THE PARK CONTROLLER NOW. EDIT MEMBER REMOVE MEMBER METHODS NEEDED
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="MemberDetails" asp-route-id="@item.Id">MemberDetails</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
