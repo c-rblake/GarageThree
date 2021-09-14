@@ -14,7 +14,6 @@ namespace GarageThree.Data
     {
         private static Faker fake;
 
-
         internal static async Task InitAsync(IServiceProvider services)
         {
             using (var db = services.GetRequiredService<GarageContext>())
@@ -22,28 +21,21 @@ namespace GarageThree.Data
                 //TODO
                 fake = new Faker("sv");
 
-
                 if (await db.Vehicles.AnyAsync()) return; //IF any.
                 //if (await db.Memberships.AnyAsync()) return;
                 
-
-                //Owner => membership //Parkingspot //Vehicle types sist vehiclesparkingspot
-
                 var owners = GetOwners();
                 await db.AddRangeAsync(owners);
                 await db.SaveChangesAsync();
 
-
-               // var members = GetMemberships(owners);
+                //var members = GetMemberships(owners);
                 //await db.AddRangeAsync(members);
-
-              //  await db.SaveChangesAsync();
 
                 //var vehicles = GetVehicles();
                 //await db.AddRangeAsync(owners);
 
-                var vehicleTypes = GetVehiclesTypes(); // Todo failed seed.
-                await db.VehicleTypes.AddRangeAsync(vehicleTypes); // db.VehicleTypes Did not find by itself
+                var vehicleTypes = GetVehiclesTypes(); 
+                await db.VehicleTypes.AddRangeAsync(vehicleTypes); 
                 await db.SaveChangesAsync();
 
                 var parkingSpots = GetParkingSpots();
@@ -54,17 +46,11 @@ namespace GarageThree.Data
                 await db.AddRangeAsync(vehicles);
                 await db.SaveChangesAsync();
 
-                
-
-                var vehicleParkingSpot = VehicleParkingSpots(vehicles, parkingSpots); // Ghost cars can happen..
+                var vehicleParkingSpot = VehicleParkingSpots(vehicles, parkingSpots); 
                 await db.AddRangeAsync(vehicleParkingSpot);
                 await db.SaveChangesAsync();
 
-
-
             }
-
-
 
         }
 
@@ -77,20 +63,15 @@ namespace GarageThree.Data
                 var parking = new VehicleParkingSpot
                 {
                     ParkingSpot = parkingSpots[i],
-                    Vehicle = vehicles[i] // Ghost Cars can happen
-                    //TODO MAPPING...
-
+                    Vehicle = vehicles[i] 
                 };
                 vehicleParkingSpots.Add(parking);
             }
 
-
             return vehicleParkingSpots;
         }
 
-
-        //FAILS TO SEED...
-        private static List<Vehicle> GetVehicles(List<Owner> owners, List<VehicleType> vehicleTypes)// ,List<VehicleParkingSpot> parkingSpots
+        private static List<Vehicle> GetVehicles(List<Owner> owners, List<VehicleType> vehicleTypes)
         {
             var vehicles = new List<Vehicle>();
             int k = 8;
@@ -99,9 +80,6 @@ namespace GarageThree.Data
                 var vehicle = new Vehicle
                 {
                     Owner = owners[i%5],
-                    // OwnerId = rnd.Next(1, owners.Count),
-                    // VehicleTypeId = rnd.Next(1, vehicleTypes.Count),
-                    //VehicleType = vehicleTypes[i%5],
                     VehicleType = vehicleTypes[i%5],
                     Color = fake.Commerce.Color(),
                     ArrivalTime = fake.Date.Recent(7),
@@ -109,20 +87,12 @@ namespace GarageThree.Data
                     RegistrationNumber = fake.Lorem.Letter(3).ToUpper() + fake.Random.Number(100, 999).ToString(),
                     Passengers = fake.Random.Int(1,6),
                     Wheels = fake.Random.Int(4, 6)
-                    
-                    //ParkingSpots = new ParkingSpot { ParkingId = i};
-
-                    //ParkingSpots
                 };
-                
 
                 vehicles.Add(vehicle);
             }
-
-
             return vehicles;
         }
-
 
         private static ICollection<Vehicle> MakeVehicles()
         {
@@ -140,14 +110,9 @@ namespace GarageThree.Data
                     Passengers = fake.Random.Int(6),
                     Wheels = fake.Random.Int(4, 6),
                 };
-
-
                 vehicles.Add(vehicle);
             }
-
-
             return vehicles;
-
         }
 
         private static List<ParkingSpot> GetParkingSpots()
@@ -162,7 +127,6 @@ namespace GarageThree.Data
                 };
                 parkingSpots.Add(parkingSpot);
             }
-
             return parkingSpots;
         }
 
@@ -175,34 +139,28 @@ namespace GarageThree.Data
                 new VehicleType {Price = 50000, ReqparkingSpots = 1, Size = 1, TypeName = "Suv"},
                 new VehicleType {Price = 50000, ReqparkingSpots = 1, Size = 3, TypeName = "Bus"},
                 new VehicleType {Price = 50000, ReqparkingSpots = 1, Size = 4, TypeName = "Truck"}
-
             };
-
             return vehicleTypes;
-
         }
-
-        //private static List<Membership> GetMemberships(List<Owner> owners)
-        //{
-        //    var memberships = new List<Membership>();
-        //    int j = 5;
-        //    for (int i = 0; i < j; i++)
-        //    {
-        //        var membership = new Membership
-        //        {
-        //            PhoneNumber = fake.Phone.PhoneNumber(),
-        //            PersonalNumber = fake.Person.Personnummer(),
-        //            Email = fake.Internet.Email(),
-        //            Password = fake.Internet.Password(8),
-        //            RegistrationTime = fake.Date.Recent(7),
-        //            OwnerId = owners[i].Id
-
-
-        //        };
-        //        memberships.Add(membership);
-        //    }
-        //    return memberships;
-        //}
+        private static List<Membership> GetMemberships(List<Owner> owners)
+        {
+            var memberships = new List<Membership>();
+            int j = 5;
+            for (int i = 0; i < j; i++)
+            {
+                var membership = new Membership
+                {
+                    PhoneNumber = fake.Phone.PhoneNumber(),
+                    PersonalNumber = fake.Person.Personnummer(),
+                    Email = fake.Internet.Email(),
+                    Password = fake.Internet.Password(8),
+                    RegistrationTime = fake.Date.Recent(7),
+                    OwnerId = owners[i].Id
+                };
+                memberships.Add(membership);
+            }
+            return memberships;
+        }
 
         private static List<Owner> GetOwners()
         {

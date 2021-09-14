@@ -64,10 +64,10 @@ namespace GarageThree.Controllers
             return RedirectToAction(nameof(Collect));
         }
 
-        public async Task<IActionResult> SignUp()
-        {
-            return View();
-        }
+        //public async Task<IActionResult> SignUp()
+        //{
+        //    return View();
+        //}
 
 
 
@@ -228,23 +228,43 @@ namespace GarageThree.Controllers
 
         public async Task<IActionResult> OverView() //2.0 => 3.0
         {
-            var model = _context.Vehicles.Select(v => new VehiclesOverView 
+                var model = _context.Vehicles.Select(v => new VehiclesOverView
+                {
+                    Id = v.Id,
+                    Regnum = v.RegistrationNumber,
+                    Model = v.Model,
+                    Arrivaldate = v.ArrivalTime,
+                    ParkedTime = (DateTime.Now - v.ArrivalTime),
+                    //3.0
+                    OwnerID = v.OwnerId,
+                    MembershipId = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId).Id, // Bara Membership ID
+                    Membership = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId), // Hela membership
+                    VehicleType = v.VehicleType,
+                    ParkingSpots = v.ParkingSpot
+                });
+
+            return View("OverView", await model.ToListAsync());
+        }
+
+        public async Task<IActionResult> FilterOverView(int OwnerID)
+        {
+            var vehicles = _context.Vehicles.Where(v => v.OwnerId == OwnerID);
+
+            var model = vehicles.Select(v => new VehiclesOverView
             {
                 Id = v.Id,
                 Regnum = v.RegistrationNumber,
                 Model = v.Model,
                 Arrivaldate = v.ArrivalTime,
                 ParkedTime = (DateTime.Now - v.ArrivalTime),
-                //3.0
-                OwnerID = v.OwnerId, 
+                OwnerID = v.OwnerId,
                 MembershipId = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId).Id, // Bara Membership ID
                 Membership = _context.Memberships.FirstOrDefault(m => m.Id == v.OwnerId), // Hela membership
                 VehicleType = v.VehicleType,
                 ParkingSpots = v.ParkingSpot
-            });
+            }).ToListAsync(); // ToListAstync()
 
-            //var membershipID = _context.Owners.Where(Membership)
-            return View("OverView", await model.ToListAsync());
+            return View("OverView", await model); // Await model.ToListAsync()
         }
 
 
@@ -316,7 +336,6 @@ namespace GarageThree.Controllers
             return View(await model.ToListAsync()); // await
         }
 
-
         public async Task<IActionResult> ReceiptsOverView()
         {
 
@@ -386,8 +405,7 @@ namespace GarageThree.Controllers
             {
                 return NotFound();
             }
-
-            return View(vehicle);
+            return RedirectToAction("OverView","Park");
         }
 
         public async Task<IActionResult> Receipt(int? id) // DO ONE THING. Unless you do Two of course.
@@ -417,7 +435,6 @@ namespace GarageThree.Controllers
             };
 
             TempData["Unpark"] = $"Vehicle {model.Regnum} Successfully Unparked";
-
 
             _context.Receipts.Add(receipt); //There is still only ONE database Call.
             _context.SaveChanges(); // Save changes

@@ -6,9 +6,19 @@
 
 <h1>OverView</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<form asp-action="FilterOverView" method="get">
+    <div class="input-group mb-3">
+        <input type="text" name="OwnerID" class="form-control" placeholder="Search on OwnerID...">
+        <div class="input-group-append">
+            @*<select name="vehicleType" asp-items="@Html.GetEnumSelectList<VehicleTypes>()" class="form-control">
+                    <option selected="selected" value="">All Types of Vehicles</option>
+                </select>*@
+        </div>
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary btn-outline-secondary" id="search-btn"><i class="fa fa-search">&emsp;Search</i></button>
+        </div>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -36,7 +46,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.ParkingSpots)
             </th>
-            <th></th>
+            <th>IF Park and Unpark Goes Back to Start with TEMPDATA Application is Finished But hard to see</th>
         </tr>
     </thead>
     <tbody>
@@ -69,7 +79,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>|
-                <a asp-action="ParkExisting" asp-route-id="@item.Id">Park</a>
+                <a asp-action="ParkExisting" asp-route-id="@item.Id">Park</a>|
+                <a asp-action="UnPark" asp-route-id="@item.Id">Unpark</a> 
             </td>
         </tr>
 }
