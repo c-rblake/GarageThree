@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +19,10 @@ namespace GarageThree.Models
         public string Color { get; set; }
         public string Model { get; set; }
         public int? Wheels { get; set; }
+
+        [Column(TypeName = "datetime2")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayName("Arrival time")]
         public DateTime ArrivalTime { get; set; }
         //Foreign Key
         public int VehicleTypeId { get; set; }
