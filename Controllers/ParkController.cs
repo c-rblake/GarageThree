@@ -41,7 +41,6 @@ namespace GarageThree.Controllers
 
         public async Task<IActionResult> FilterCollect(string RegistrationNumber = null)
         {
-            //Todo if RegistrationNumber = null do nothing
             if (!String.IsNullOrWhiteSpace(RegistrationNumber))
             { 
                 var model = _context.Vehicles.Include(v => v.VehicleType)
@@ -51,25 +50,10 @@ namespace GarageThree.Controllers
                 return View(nameof(Collect), await model.ToListAsync());
             }
 
-            TempData["Empty"] = "Registration number could not be found"; //BUGGY
-            //if (model.Count() == 0)
-            //{
-            //    TempData["Empty"] = "Registration number could not be found";
-            //    Console.WriteLine("funkar");
-            //}
-            //model = RegistrationNumber == null ? model : model.Where(v=>v.RegistrationNumber=="helo"); Not allowed
-
-            //Todo Dropdown logic.
+            TempData["Empty"] = "Registration number could not be found";
 
             return RedirectToAction(nameof(Collect));
         }
-
-        //public async Task<IActionResult> SignUp()
-        //{
-        //    return View();
-        //}
-
-
 
         // GET: Park/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -78,7 +62,6 @@ namespace GarageThree.Controllers
             {
                 return NotFound();
             }
-
             var vehicle = await _context.Vehicles
                 .Include(v => v.VehicleType)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -86,7 +69,6 @@ namespace GarageThree.Controllers
             {
                 return NotFound();
             }
-
             return View(vehicle);
         }
 
@@ -105,12 +87,11 @@ namespace GarageThree.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Park([Bind("Id,OwnerId,RegistrationNumber,Passengers,Color,Wheels,VehicleTypeId")] Vehicle vehicle)
         {
-
             if (ModelState.IsValid)
             {
                 
                 var ownerId = _context.Owners.Where(o => o.Id == vehicle.OwnerId);
-                if (!ownerId.Any()) // Select(v=>v).ToList(). TO DO VALIDATE FURTHER
+                if (!ownerId.Any())
                 {
                     // TODO SWAP TO DEPENDECY INJECTION-
                     ModelState.AddModelError("OwnerId", "New to the Garage? Sign up here");
@@ -136,16 +117,12 @@ namespace GarageThree.Controllers
                 _context.Vehicles.Add(vehicle);
 
                 var availibleParks = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).FirstOrDefault(); // NR0 returned.
-
                 var availibleParks2 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).Where(ps => ps.Id == 2).FirstOrDefault(); // Works 2nd returned
-
                 var availibleParks3 = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots.Where(vps=> vps.Vehicle == null)).FirstOrDefault(); // Works
-                
                 var availibleParks4 = _context.ParkingSpots
                     .Include(ps => ps.VehicleParkingSpots)
                     .Where(ps => ps.VehicleParkingSpots.Count == 0)
                     .FirstOrDefault(); 
-
                 var allParkings = _context.ParkingSpots.Include(ps => ps.VehicleParkingSpots).ToList();
 
                 var newParking = new VehicleParkingSpot
@@ -169,38 +146,21 @@ namespace GarageThree.Controllers
 
         public async Task<IActionResult> ParkExisting(int? Id)  //Asp item Vehicle.OwnerID
         {
-            //var model = _context.Owners
-            //    .Include(o => o.Vehicles)
-            //    .Where(o => o.Id == OwnerID);
-
             var vehicles = _context.Vehicles.Where(v=> v.Id == Id); // Get Vehicles
-
             var vehicle = vehicles.FirstOrDefault(); // First Vehicle
-
-            //  await Park(vehicle2);
-
             vehicle.ArrivalTime = DateTime.Now;
-
             var availibleParks4 = _context.ParkingSpots
-    .Include(ps => ps.VehicleParkingSpots)
-    .Where(ps => ps.VehicleParkingSpots.Count == 0)
-    .FirstOrDefault();
+                .Include(ps => ps.VehicleParkingSpots)
+                .Where(ps => ps.VehicleParkingSpots.Count == 0)
+                .FirstOrDefault();
 
             var newParking = new VehicleParkingSpot
             {
                 ParkingSpot = availibleParks4,
                 Vehicle = vehicle
             };
-
             _context.Add(newParking);
-
             await _context.SaveChangesAsync();
-
-
-
-
-
-            //some temp data
 
             return RedirectToAction("Overview","Park");
         }
@@ -212,16 +172,13 @@ namespace GarageThree.Controllers
             {
                 return NotFound();
             }
-
             var vehicle = await _context.Vehicles.FindAsync(id);
-            
+
             if (vehicle == null)
             {
                 return NotFound();
             }
             //ViewData["VehicleTypeId"] = new SelectList(_context.VehicleTypes, "Id", "Id", vehicle.VehicleTypeId);
-            
-
             return View(vehicle);
         }
 
@@ -248,7 +205,6 @@ namespace GarageThree.Controllers
         public async Task<IActionResult> FilterOverView(int OwnerID)
         {
             var vehicles = _context.Vehicles.Where(v => v.OwnerId == OwnerID);
-
             var model = vehicles.Select(v => new VehiclesOverView
             {
                 Id = v.Id,
@@ -266,7 +222,6 @@ namespace GarageThree.Controllers
             return View("OverView", await model); // Await model.ToListAsync()
         }
 
-
         public async Task<IActionResult> MembersOverview() // Automapper.... OM JAG FÅR ETT ID så...
         {
             var model = _context.Memberships.Select(m => new MembersOverview
@@ -277,7 +232,6 @@ namespace GarageThree.Controllers
                 Vehicles = _context.Vehicles.Where(v=> v.OwnerId == m.OwnerId).ToList(), // Med Hidden ID i nästa steg. DETAILS
                 VehicleCount = _context.Vehicles.Where(v => v.OwnerId == m.OwnerId).Count()
             });
-           
             return View(await model.ToListAsync());
         }
 
@@ -324,8 +278,8 @@ namespace GarageThree.Controllers
             //var vehicles = _context.Vehicles.Where(v => v.OwnerId == owner.Id).ToList();
             var vehicles2 = _context.Owners.Include(o => o.Vehicles).Where(o => o.Id == member.Id);
 
-            var model = vehicles2.Select(ov => new OwnerVehicleView {
-
+            var model = vehicles2.Select(ov => new OwnerVehicleView 
+            {
                 Id= ov.Id,
                 FirstName = ov.FirstName,
                 LastName = ov.LastName,
@@ -337,11 +291,8 @@ namespace GarageThree.Controllers
 
         public async Task<IActionResult> ReceiptsOverView()
         {
-
                 var receiptsContext = _context.Receipts;
                 return View("ReceiptsOverView", await receiptsContext.ToListAsync());
-
-
         }
 
         // POST: Park/Edit/5
@@ -364,7 +315,6 @@ namespace GarageThree.Controllers
                     _context.Update(vehicle);
                     // Not set from outside or Bind. Todo View model and New class Preferred.
                     _context.Entry(vehicle).Property(v => v.ArrivalTime).IsModified = false; // Lämnas orörd vid SaveChanges.
-
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -393,7 +343,6 @@ namespace GarageThree.Controllers
             }
             var vehicle = await _context.Vehicles.Where(v => v.Id == id).FirstOrDefaultAsync();
             var vehicleParkingSpots = await _context.VehicleParkingSpot.Where(vps => vps.VehicleId == id).ToListAsync();
-            //if null??
             _context.VehicleParkingSpot.RemoveRange(vehicleParkingSpots);
             _context.SaveChanges();
 
@@ -440,7 +389,6 @@ namespace GarageThree.Controllers
 
             return View("Receipt", model);
         }
-        
 
         // POST: Park/UnPark/5
         [HttpPost, ActionName("Delete")]
